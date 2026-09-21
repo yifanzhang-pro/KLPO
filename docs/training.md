@@ -213,7 +213,7 @@ assumptions. Finite-M noise does not guarantee a stable or monotone sample updat
 - Store the sampler version and actual probabilities used to collect each
   trajectory, including sampling transforms. Publishing checkpoints must not
   replace historical records. On replay, recompute current scores and feedback.
-  The CPU example demonstrates reuse; the provided GPU launcher uses one pass.
+  The CPU example demonstrates reuse; the provided GPU launcher uses one pass per queued, versioned record bank.
 - Sampler full-vocabulary records may contain `-inf` for zero-mass actions; active
   sampled actions must have positive sampler mass. The full trainer support must
   be positive. Truncating sampler support or selecting trajectories by outcome
