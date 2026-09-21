@@ -64,12 +64,24 @@ def test_training_dry_run_uses_actual_klpo_path(recipe, route):
     if route != 'token':
         command += ['--route', route]
     result = subprocess.run(command, text=True, capture_output=True, check=True)
-    for flag in ('--actor.loss_mode klpo', '--actor.klpo_beta 0.3', '--actor.klpo_kl_estimator mc', '--actor.klpo_mc_samples 128', '--train.force_sync_mode', '--train.async_queue_size 1',
+    for flag in ('--actor.loss_mode klpo', '--actor.klpo_beta 0.3', '--actor.klpo_kl_estimator mc', '--actor.klpo_mc_samples 128', '--train.async_queue_size 4',
                  '--algo.advantage.is_correction_level off', '--algo.advantage.no_whiten',
                  '--algo.kl.init_coef 0', '--rollout.n_samples_per_prompt 1', '--train.max_epochs 1',
                  f'--actor.klpo_route {route}'):
         assert flag in result.stdout
     assert 'is_correction_threshold' not in result.stdout and 'flash_reinforce' not in result.stdout
+    assert '--train.force_sync_mode' not in result.stdout
+    assert '--train.force_on_policy' not in result.stdout
+
+
+def test_training_sync_is_an_explicit_fallback():
+    command = [sys.executable, str(ROOT / 'scripts/train_molt.py'),
+        '--molt-path', '/tmp/molt', '--model', 'model', '--train-data', '/tmp/train',
+        '--eval-data', '/tmp/eval', '--sync', '--async-queue-size', '8', '--dry-run']
+    result = subprocess.run(command, text=True, capture_output=True, check=True)
+    assert '--train.async_queue_size 1' in result.stdout
+    assert '--train.force_sync_mode' in result.stdout
+    assert '--train.force_on_policy' in result.stdout
 
 
 def test_native_backend_version_and_worker_contract():
