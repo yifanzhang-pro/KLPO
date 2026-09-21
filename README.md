@@ -120,7 +120,7 @@ This release provides the theory, loss implementation, CPU verification, and nat
 }
 ```
 
-[Download BibTeX](citation.bib). The [published PDF](KLPO.pdf) is a snapshot of paper-source commit [`1658d8d`](https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/1658d8d).
+[Download BibTeX](citation.bib).
 
 ## License and acknowledgments
 
