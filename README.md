@@ -19,7 +19,7 @@ KLPO is a critic-free, single-rollout method for off-policy agentic reinforcemen
 - **One complete response per prompt is sufficient.** MC-KL uses auxiliary *token* draws at visited prefixes, not extra response rollouts.
 - **Token regression + MC-KL is the default.** Each token uses its own coefficient `R - beta * log(p_action / q_action)` and an independently estimated score correction.
 - **Two regression routes, four KL estimators.** Sequence regression is an alternative; TopK-KL, Binary KL, and Full KL are selectable for either route.
-- **Native Molt integration.** The [labs-molt KLPO branch](https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl) captures sampler records and scores them in the trainer through its native loss interface.
+- **Asynchronous Molt integration.** The [labs-molt KLPO branch](https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl) overlaps rollout generation with learner updates while preserving each trajectory’s actual sampler records.
 
 [![Figure 1: derivation of KLPO token regression with MC-KL, the default route.](assets/token-regression-mc.png)](KLPO.pdf#page=2)
 
@@ -84,7 +84,7 @@ Token regression uses per-token feedback; sequence regression uses trajectory fe
 | [Paper](KLPO.pdf) · [LaTeX source](https://github.com/yifanzhang-pro/RPG-2-Overleaf) | Derivations, proofs, assumptions, and SKLPO comparison |
 | [Website maintenance](docs/website.md) | Local preview, GitHub Pages publication, and updating the paper snapshot |
 
-The Molt launcher defaults to `--route token --kl-estimator mc --mc-samples 128`. GPU training requires a compatible Linux/CUDA environment; follow the pinned backend revision in the training guide. The optional predicted-KL budget is disabled in the Molt launcher.
+The Molt launcher defaults to asynchronous execution with a four-batch queue, `--route token --kl-estimator mc --mc-samples 128`. Use `--async-queue-size N` to control bounded policy lag or `--sync` for the synchronous fallback. GPU training requires a compatible Linux/CUDA environment; follow the pinned backend revision in the training guide. The optional predicted-KL budget is disabled in the Molt launcher.
 
 ## Validation and scope
 
@@ -94,7 +94,7 @@ CPU tests cover all eight combinations, independent MC gradient expectations, le
 MOLT_SOURCE_PATH=/path/to/labs-molt python -m pytest -q
 ```
 
-This release provides the theory, loss implementation, CPU verification, and native training integration. **GPU training and paper-scale benchmark reproduction have not been validated.** Example hyperparameters are starting values, not tuned benchmark settings. The training guide documents the current synchronous launcher restriction and fixed-record replay limitations.
+This release provides the theory, loss implementation, CPU verification, and native training integration. **GPU training and paper-scale benchmark reproduction have not been validated.** Example hyperparameters are starting values, not tuned benchmark settings. The asynchronous launcher consumes each versioned auxiliary record bank once; fixed-record reuse remains an empirical surrogate rather than a fresh conditionally unbiased MC estimate.
 
 ## Citation
 
