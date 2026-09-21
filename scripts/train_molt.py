@@ -30,13 +30,17 @@ def main():
     parser.add_argument("--output", type=Path, default=Path("outputs/klpo"))
     parser.add_argument("--actor-gpus", type=int, default=1)
     parser.add_argument("--rollout-gpus", type=int, default=7)
+    parser.add_argument("--async-queue-size", type=int, default=4,
+                        help="Maximum queued rollout batches; values >1 enable bounded staleness")
+    parser.add_argument("--sync", action="store_true",
+                        help="Disable trainer/rollout overlap and force on-policy synchronous collection")
     parser.add_argument("--episodes", type=int, default=1000,
                         help="Dataset passes, NOT optimizer updates")
     parser.add_argument("--beta", type=float, default=0.1, help="Positive KLPO regularization coefficient")
     parser.add_argument("--attention", default="flash_attention_2", choices=["flash_attention_2", "te"])
     parser.add_argument("--dry-run", action="store_true", help="Print command without importing Molt or starting training")
     args = parser.parse_args()
-    if min(args.actor_gpus, args.rollout_gpus, args.episodes) < 1 or 128 % args.actor_gpus:
+    if min(args.actor_gpus, args.rollout_gpus, args.episodes, args.async_queue_size) < 1 or 128 % args.actor_gpus:
         parser.error("GPU counts/episodes must be positive; actor GPUs must divide batch size 128")
     r1 = args.recipe == "r1"
     if not math.isfinite(args.beta) or args.beta <= 0:
@@ -60,7 +64,7 @@ def main():
         "rollout.temperature": 1.0, "rollout.top_p": 1.0,
         "train.batch_size": 128, "train.micro_batch_size": 1,
         "train.max_epochs": 1, "train.num_episodes": args.episodes,
-        "train.async_queue_size": 1,
+        "train.async_queue_size": 1 if args.sync else args.async_queue_size,
         "actor.num_nodes": 1, "actor.num_gpus_per_node": args.actor_gpus,
         "ref.num_nodes": 1, "ref.num_gpus_per_node": args.actor_gpus,
         "vllm.num_engines": args.rollout_gpus, "vllm.tensor_parallel_size": 1,
@@ -88,9 +92,10 @@ def main():
     command = [sys.executable, "-u", "-m", "molt.cli.train_rl_ray"]
     for key, value in flags.items():
         command.extend([f"--{key}", str(value)])
-    command += ["--data.apply_chat_template", "--train.force_on_policy", "--train.force_sync_mode",
-                "--train.colocate_fsdp_models", "--fsdp.packing_samples", "--eval.eval_at_start",
-                "--algo.advantage.no_whiten"]
+    command += ["--data.apply_chat_template", "--train.colocate_fsdp_models",
+                "--fsdp.packing_samples", "--eval.eval_at_start", "--algo.advantage.no_whiten"]
+    if args.sync:
+        command += ["--train.force_on_policy", "--train.force_sync_mode"]
     print(f"Molt revision: {MOLT_REVISION}\nWorking directory: {root}", flush=True)
     print("MAX_AGENT_TURNS=1 " + shlex.join(command), flush=True)
     if args.dry_run:
