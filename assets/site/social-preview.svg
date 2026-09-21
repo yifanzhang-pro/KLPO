@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="white" stroke-opacity=".045"/></pattern><radialGradient id="glow"><stop stop-color="white" stop-opacity=".11"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="630" fill="#0a0a0a"/><rect width="1200" height="630" fill="url(#grid)"/><ellipse cx="600" cy="250" rx="470" ry="400" fill="url(#glow)"/>
+<g font-family="Arial, Helvetica, sans-serif" text-anchor="middle" fill="white">
+<text x="600" y="84" font-size="15" letter-spacing="3" fill="#aaa">CRITIC-FREE · SINGLE-ROLLOUT · OFF-POLICY</text>
+<text x="600" y="215" font-size="80" letter-spacing="-3">KL-Regularized</text>
+<text x="600" y="305" font-size="80" letter-spacing="-3">Policy Optimization</text>
+<text x="600" y="366" font-size="25">Critic-Free Agentic Reinforcement Learning.</text>
+<text x="600" y="410" font-size="23" fill="#aaa">Default: KLPO token regression + Monte Carlo KL (MC-KL).</text>
+<text x="600" y="483" font-size="20">Yifan Zhang et al.</text>
+<text x="600" y="520" font-size="13" letter-spacing="2" fill="#888">TECHNICAL REPORT · SEPTEMBER 2026</text>
+<text x="600" y="582" font-size="14" letter-spacing="1" fill="#aaa">yifanzhang-pro.github.io/KLPO</text>
+</g></svg>

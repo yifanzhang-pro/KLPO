@@ -1,0 +1,14 @@
+KLPO
+
+Project website styling is adapted from yifanzhang-pro/recurrent-looped-tranformer:
+https://github.com/yifanzhang-pro/recurrent-looped-tranformer
+
+Training launcher scaffolding in scripts/train_molt.py is adapted from
+yifanzhang-pro/FlashREINFORCE, licensed under Apache License 2.0:
+https://github.com/yifanzhang-pro/FlashREINFORCE
+
+The optional integration targets the KLPO branch of the NVIDIA-NeMo/labs-molt
+fork at https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl,
+pinned to revision e24e22faaf0d3cf3ad56dec47215117d95914be2. Molt remains a
+separately installed project and retains its own NVIDIA and OpenRLHF notices
+and licenses.

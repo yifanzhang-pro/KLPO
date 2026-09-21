@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>KLPO — Critic-Free Agentic Reinforcement Learning</title>
+  <meta name="description" content="KL-Regularized Policy Optimization: critic-free, single-rollout agentic reinforcement learning. Token regression with Monte Carlo KL, a technical report, and a PyTorch implementation.">
+  <link rel="canonical" href="https://yifanzhang-pro.github.io/KLPO/">
+  <meta name="citation_title" content="KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning">
+  <meta name="citation_author" content="Yifan Zhang">
+  <meta name="citation_publication_date" content="2026/09/18">
+  <meta name="citation_pdf_url" content="https://yifanzhang-pro.github.io/KLPO/KLPO.pdf">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yifanzhang-pro.github.io/KLPO/">
+  <meta property="og:title" content="KLPO — Critic-Free Agentic Reinforcement Learning">
+  <meta property="og:description" content="One complete rollout. No critic. Token regression + Monte Carlo KL. Read the paper and explore the implementation.">
+  <meta property="og:image" content="https://yifanzhang-pro.github.io/KLPO/assets/site/social-preview.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="KLPO: KL-Regularized Policy Optimization. Default: token regression + MC-KL.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/site/favicon.svg?v=2" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site/template.css">
+  <link rel="stylesheet" href="assets/site/style.css?v=2">
+  <script src="assets/site/site.js?v=2" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="navbar" aria-label="Main navigation"><div class="container">
+  <div class="navbar-brand"><a class="navbar-item" href="#top" aria-label="KLPO home">KLPO</a><button type="button" class="navbar-burger" aria-label="Open navigation" aria-expanded="false" aria-controls="navbarMenu" hidden><span></span><span></span><span></span></button></div>
+  <div id="navbarMenu" class="navbar-menu"><div class="navbar-end"><a class="navbar-item" href="#abstract">Abstract</a><a class="navbar-item" href="#overview">Method</a><a class="navbar-item" href="#implementation">Code</a><a class="navbar-item" href="#paper">Paper</a><a class="navbar-item" href="#citation">Citation</a><a class="navbar-item" href="https://yfz.ai/blog">Blog</a></div></div>
+</div></nav>
+<header class="hero" id="top"><div class="hero-body"><div class="container has-text-centered">
+  <p class="eyebrow">Critic-free · Single-rollout · Off-policy</p>
+  <h1 class="title">KL-Regularized<br>Policy Optimization</h1>
+  <p class="subtitle is-hero-subtitle"><span class="highlight">Critic-Free Agentic Reinforcement Learning.</span><br>Default: KLPO token regression + Monte Carlo KL (MC-KL).</p>
+  <div class="authors-list"><a href="https://yifzhang.com">Yifan Zhang</a> &nbsp;et al.</div>
+  <div class="affiliations">Technical report &nbsp;·&nbsp; September 18, 2026<br>Updated September 20, 2026</div>
+  <div class="hero-links"><a class="button primary" href="KLPO.pdf">Paper ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a><a class="button" href="#method">Explore the method ↓</a><a class="button" href="#citation">Cite this work</a></div>
+  <div class="hero-pills"><span class="pill">Token regression</span><span class="pill">MC-KL (default)</span><span class="pill">Native Molt integration</span></div>
+</div></div></header>
+<main id="main">
+<section id="abstract" class="section content-section"><div class="container"><h2 class="section-title">Abstract</h2><div class="content">
+<p>KL-Regularized Policy Optimization (KLPO) is a critic-free, single-rollout method for asynchronous off-policy agentic reinforcement learning. Its canonical objective fits a local policy mirror descent (PMD) condition by regressing trainer-to-sampler log-ratios, with no multiplicative importance weights. Our default token-regression implementation uses a per-token return coefficient and score centering to realize this gradient without a critic or reward group. Monte Carlo KL (MC-KL) estimates the conditional score mean with M ≥ 1 independent sampler draws per prefix, recovering the full-KL gradient in expectation without extra response rollouts. Under deterministic token transitions and terminal rewards, Bellman telescoping gives an alternative sequence-regression objective. Removing its prompt value changes the population loss only by a parameter-independent constant; independent MC-KL with M ≥ 2 and leave-one-out trajectory feedback preserves its expected gradient. Fresh auxiliary draws from the historical sampler preserve conditional unbiasedness after adaptive updates; fixed-record reuse is an empirical surrogate. Top-K Aggregated KL (TopK-KL) and Binary KL are optional approximations that need not preserve the exact equivalence. Both routes avoid estimating or learning prompt-and-version normalizers, so asynchronous replay needs no auxiliary normalization predictor or same-prompt response group.</p>
+</div></div></section>
+<section id="overview" class="section content-section"><div class="container"><h2 class="section-title">Method and execution</h2><div class="content">
+  <div class="columns">
+    <div class="column"><article class="pillar-box"><span class="pillar-number">01 / COLLECTION</span><h3>One complete rollout.</h3><p>No same-prompt response group is required. Auxiliary MC samples are token draws at visited prefixes, not additional completions.</p></article></div>
+    <div class="column"><article class="pillar-box"><span class="pillar-number">02 / FEEDBACK</span><h3>A coefficient for each token.</h3><p>Terminal rewards and trainer-to-sampler log-ratios supply per-token feedback. No critic or learned prompt normalizer is needed.</p></article></div>
+    <div class="column"><article class="pillar-box"><span class="pillar-number">03 / CORRECTION</span><h3>Independent Monte Carlo KL.</h3><p>Independent auxiliary draws estimate the sampler-conditioned score mean. Token regression supports any M ≥ 1, with no extra response rollouts.</p></article></div>
+  </div>
+  <h3>Historical sampler. Current trainer.</h3>
+  <p>Retain the collection version and actual sampler probabilities. Recompute trainer scores and feedback at each update, with no multiplicative importance weights. The default is <strong>KLPO token regression + MC-KL</strong>.</p>
+  <figure class="architecture">
+    <div class="architecture-top"><div class="arch-box"><strong>Sample under q</strong><span>One complete response · terminal reward R<br>Independent auxiliary tokens at each prefix</span></div><span class="arch-arrow" aria-hidden="true">→</span><div class="arch-box"><strong>Score under p</strong><span>Current trainer log-probabilities<br>Action score − mean auxiliary score</span></div></div>
+    <div class="arch-state"><strong>Token feedback: h<sub>u</sub> = R − β log[p(a<sub>u</sub>) / q(a<sub>u</sub>)]</strong><p>Sum over generated policy tokens. Average over complete responses.</p></div>
+    <figcaption>MC draws are independent of the complete rollout and sampled with replacement. M counts auxiliary tokens per prefix, not full response rollouts.</figcaption>
+  </figure>
+  <h3>From local policy improvement to a critic-free update.</h3>
+  <figure><a href="assets/token-regression-mc.png" aria-label="Open full-resolution Figure 1"><img src="assets/token-regression-mc.png" alt="Figure 1 derives the local RPG-URKL objective, Gibbs optimum, profiled regression, and critic-free token update with independent MC-KL." width="1340" height="1272" loading="lazy" decoding="async"></a><figcaption>Figure 1 from the report. Step 7 builds on <a href="https://arxiv.org/html/2609.15987v1#S3.SS1">BPO’s critic-free PMD reformulation</a>; Step 8 uses <a href="https://arxiv.org/abs/2609.20807v1">Score Centering</a>. Figure 2 presents the sequence-regression alternative and shared optional predicted-KL budget. <a href="KLPO.pdf#page=2">Open in the paper ↗</a></figcaption></figure>
+</div></div></section>
+<section id="method" class="section content-section"><div class="container"><h2 class="section-title">Regression routes and KL estimators</h2><div class="content">
+<p>The regression route determines how tokens are weighted. The KL estimator determines how their scores are corrected. Explore all eight implemented combinations.</p>
+      <div class="explorer">
+        <form class="explorer-controls" id="method-controls">
+          <fieldset><legend>Regression route</legend><div class="option-group route-options"><label><input type="radio" name="route" value="token" checked><span>Token <small>Default</small></span></label><label><input type="radio" name="route" value="sequence"><span>Sequence</span></label></div></fieldset>
+          <fieldset><legend>KL estimator</legend><div class="option-group estimator-options"><label><input type="radio" name="estimator" value="mc" checked><span>MC-KL <small>Default</small></span></label><label><input type="radio" name="estimator" value="topk"><span>TopK-KL</span></label><label><input type="radio" name="estimator" value="binary"><span>Binary KL</span></label><label><input type="radio" name="estimator" value="full"><span>Full KL</span></label></div></fieldset>
+        </form>
+        <noscript><p class="noscript-note">The default method is shown below. Enable JavaScript to explore other combinations, or see the <a href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithms.md">complete algorithm reference</a>.</p></noscript>
+        <div class="explorer-output" aria-live="polite" aria-atomic="true">
+          <div class="explorer-title"><h3 id="method-title">KLPO token regression + MC-KL</h3><span class="method-badge" id="method-badge">Default</span></div>
+          <div class="method-facts"><div><span class="tiny-label">FEEDBACK</span><p id="method-feedback">Each token uses h_u = R − βℓ_u, where ℓ_u = log p(a_u) − log q(a_u).</p></div><div><span class="tiny-label">SAMPLER RECORDS</span><p id="method-records">M independent token draws per prefix, with replacement. M ≥ 1; launcher default M = 128.</p></div></div>
+          <div class="formula-panel"><span class="tiny-label">SINGLE-RESPONSE LOSS GRADIENT</span><pre id="method-gradient">−∑_u h_u [∇ log p(a_u) − (1/M) ∑_j ∇ log p(v_u,j)]</pre><p id="method-property">Independent auxiliary draws recover the full-KL token gradient in expectation, including M = 1.</p></div>
+          <div class="method-code"><span class="tiny-label">LOSS API</span><code id="method-api">klpo_token_loss(..., kl_estimator="mc")</code><span class="tiny-label command-label">TRY IT ON CPU</span><code id="method-command">python examples/train_toy.py</code></div>
+        </div>
+      </div>
+      <p class="method-note">Here q is the actual sampler and p is the trainer; all probabilities are conditional on the visited prefix. Sum over policy tokens, then average over complete responses. <strong>M counts random draws; K counts head tokens.</strong></p>
+      <div class="method-caveats"><div><h3>Keep the sampler matched.</h3><p>MC draws are independent of the complete rollout and across prefixes. Fresh draws from the historical sampler preserve conditional unbiasedness after adaptive updates. Reusing fixed records gives an empirical surrogate.</p></div><div><h3>Equivalence has assumptions.</h3><p>Token and sequence population gradients agree for Full KL and independent MC-KL under the report’s complete-rollout, deterministic-transition, and terminal-reward assumptions. Single-sample gradients can differ; TopK-KL and Binary KL are approximations.</p></div></div>
+
+      <a class="text-link reference-link" href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithms.md">Full formulas, APIs, and numerical contracts <span aria-hidden="true">↗</span></a>
+</div></div></section>
+<section id="implementation" class="section content-section"><div class="container"><h2 class="section-title">Implementation and quick start</h2><div class="content">
+  <p>A CPU example to inspect the update, with a native Molt interface for model training. The toy policy uses variable-length responses, a terminal verifier, historical sampler versions, and repeated learner updates. No model or dataset download is needed.</p>
+  <p><strong>Requirements:</strong> Python 3.10+ and PyTorch 2.2+. Code is licensed under Apache 2.0.</p>
+  <pre><code><span class="code-comment"># Clone and install</span>
+git clone https://github.com/yifanzhang-pro/KLPO.git
+cd KLPO
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[test]'
+
+<span class="code-comment"># Token regression + MC-KL (default, M=128)</span>
+python examples/train_toy.py
+
+<span class="code-comment"># A single auxiliary draw is also valid</span>
+python examples/train_toy.py --mc-samples 1
+
+<span class="code-comment"># Verify the loss implementation</span>
+python -m pytest -q</code></pre>
+  <div class="table-container" tabindex="0" role="region" aria-label="Implementation resources"><table class="table"><thead><tr><th scope="col">Resource</th><th scope="col">Contents</th></tr></thead><tbody>
+    <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithms.md">Algorithm reference</a></th><td>All eight loss combinations, sampling contracts, and numerical stabilization.</td></tr>
+    <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/training.md">Training guide</a></th><td>Pinned native Molt installation, R1/Qwen-Math launchers, and execution limits.</td></tr>
+    <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl">Native Molt backend</a></th><td>Sampler probability capture, replay transport, and differentiable trainer scoring.</td></tr>
+    <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/KLPO/actions/workflows/tests.yml">CPU tests and CI</a></th><td>Gradient identities, numerical boundaries, and the native backend contract.</td></tr>
+  </tbody></table></div>
+  <div class="message"><div class="message-body"><strong>Release scope.</strong> Theory, mathematical loss APIs, CPU verification, and native training integration. GPU training and paper-scale benchmark reproduction have not been validated. The current Molt launcher runs synchronously; see the training guide for execution and fixed-record replay limits. Example hyperparameters are starting values.</div></div>
+</div></div></section>
+<section id="paper" class="section content-section"><div class="container"><h2 class="section-title">Paper and resources</h2><div class="content">
+  <p><strong>KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning</strong><br>Yifan Zhang et al. · Technical report · 56 pages<br>September 18, 2026 · Updated September 20, 2026</p>
+  <p>The report includes the complete derivation, proofs, implementation assumptions, and an appendix comparison with the SKLPO response-Gibbs objective.</p>
+  <p><a class="button is-primary" href="KLPO.pdf" download>Download paper ↓</a><a class="button" href="https://github.com/yifanzhang-pro/RPG-2-Overleaf">LaTeX source ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a></p>
+  <p class="is-size-7 has-text-grey">The published PDF is an unmodified snapshot of paper-source commit <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/1658d8d">1658d8d</a>.</p>
+</div></div></section>
+<section id="citation" class="section content-section"><div class="container"><h2 class="section-title">Citation</h2><div class="content">
+  <p>If you find this work useful, please cite:</p>
+  <pre><code id="bibtex">@techreport{zhang2026klpo,
+  title  = {{KL}-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning},
+  author = {Zhang, Yifan and others},
+  year   = {2026},
+  month  = sep,
+  url    = {https://yifanzhang-pro.github.io/KLPO/}
+}</code></pre>
+  <button type="button" id="copy-citation" class="button" hidden>Copy BibTeX</button><a class="button" href="citation.bib" download>Download .bib ↓</a><p id="copy-status" role="status" aria-live="polite"></p>
+</div></div></section>
+</main>
+<footer class="footer"><div class="container"><div class="content has-text-centered"><p><a href="#abstract">Abstract</a> &nbsp;·&nbsp; <a href="#overview">Method</a> &nbsp;·&nbsp; <a href="#implementation">Code</a> &nbsp;·&nbsp; <a href="#citation">Citation</a> &nbsp;·&nbsp; <a href="https://github.com/yifanzhang-pro/KLPO">GitHub</a> &nbsp;·&nbsp; <a href="https://yfz.ai/blog">Yifan's Blog</a></p><p>&copy; 2026 Yifan Zhang. Code released under <a href="https://github.com/yifanzhang-pro/KLPO/blob/main/LICENSE">Apache 2.0</a>. <a href="https://github.com/yifanzhang-pro/KLPO/blob/main/NOTICE">Acknowledgments</a>.</p></div></div></footer>
+</body>
+</html>
