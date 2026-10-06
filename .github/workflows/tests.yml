@@ -1,0 +1,24 @@
+name: CPU tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/checkout@v4
+        with:
+          repository: yifanzhang-pro/labs-molt
+          ref: 913e2975d4be5c634a444445fed656e984c2cdba
+          path: .molt-tests
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install -e '.[test]'
+      - run: python scripts/check_molt.py --molt-path .molt-tests
+      - run: python -m pytest -q
+        env:
+          MOLT_SOURCE_PATH: ${{ github.workspace }}/.molt-tests

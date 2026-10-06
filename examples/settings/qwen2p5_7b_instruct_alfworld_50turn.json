@@ -1,0 +1,23 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "agent_kind": "alfworld",
+  "max_agent_turns": 50,
+  "flags": {
+    "data.label_key": "game_file",
+    "data.max_samples": 1024,
+    "data.max_len": 16384,
+    "rollout.max_new_tokens": 8192,
+    "rollout.batch_size": 64,
+    "train.batch_size": 64,
+    "train.num_episodes": 20,
+    "actor.lr_scheduler": "constant",
+    "eval.steps": 40,
+    "eval.n_samples_per_prompt": 3,
+    "eval.temperature": 1.0,
+    "eval.top_p": 0.7,
+    "rollout.vllm_generate_batch_size": 64
+  },
+  "name": "qwen2p5_7b_instruct_alfworld_50turn",
+  "description": "KLPO multi-turn experiment adapted from FlashREINFORCE; token regression + MC-KL by default.",
+  "source": "https://github.com/yifanzhang-pro/FlashREINFORCE/blob/a1ebe22/examples/settings/qwen2p5_7b_instruct_alfworld_50turn.json"
+}

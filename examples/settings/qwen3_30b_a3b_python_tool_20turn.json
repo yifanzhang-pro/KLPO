@@ -1,0 +1,15 @@
+{
+  "model": "Qwen/Qwen3-30B-A3B",
+  "agent_kind": "python_tool",
+  "max_agent_turns": 20,
+  "flags": {
+    "data.max_samples": 7500,
+    "data.max_len": 16384,
+    "rollout.max_new_tokens": 14336,
+    "train.num_episodes": 17,
+    "rollout.vllm_generate_batch_size": 128
+  },
+  "name": "qwen3_30b_a3b_python_tool_20turn",
+  "description": "KLPO multi-turn experiment adapted from FlashREINFORCE; token regression + MC-KL by default.",
+  "source": "https://github.com/yifanzhang-pro/FlashREINFORCE/blob/a1ebe22/examples/settings/qwen3_30b_a3b_python_tool_20turn_trust_ablation.json"
+}

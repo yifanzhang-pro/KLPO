@@ -1,0 +1,15 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "agent_kind": "python_tool",
+  "max_agent_turns": 10,
+  "flags": {
+    "data.max_samples": 7500,
+    "data.max_len": 8192,
+    "rollout.max_new_tokens": 6144,
+    "train.num_episodes": 68,
+    "rollout.vllm_generate_batch_size": 128
+  },
+  "name": "qwen2p5_7b_instruct_python_tool_10turn",
+  "description": "KLPO multi-turn experiment adapted from FlashREINFORCE; token regression + MC-KL by default.",
+  "source": "https://github.com/yifanzhang-pro/FlashREINFORCE/blob/a1ebe22/examples/settings/qwen2p5_7b_instruct_python_tool_10turn.json"
+}

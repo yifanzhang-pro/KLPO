@@ -1,0 +1,19 @@
+{
+  "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "agent_kind": "math",
+  "max_agent_turns": 1,
+  "flags": {
+    "data.max_samples": 1460,
+    "data.max_len": 9216,
+    "rollout.max_new_tokens": 8192,
+    "rollout.vllm_generate_batch_size": 128,
+    "train.num_episodes": 350,
+    "eval.steps": 128,
+    "eval.n_samples_per_prompt": 32,
+    "eval.temperature": 0.6,
+    "eval.top_p": 0.95
+  },
+  "name": "deepseek_r1_distill_qwen_1p5b_math_sanity",
+  "description": "KLPO single-turn math experiment adapted from FlashREINFORCE; token regression + MC-KL by default.",
+  "source": "https://github.com/yifanzhang-pro/FlashREINFORCE/blob/a1ebe22/examples/settings/deepseek_r1_distill_qwen_1p5b_math_sanity.json"
+}

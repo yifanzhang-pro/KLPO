@@ -1,0 +1,121 @@
+/* KLPO-specific components; the publication shell lives in template.css. */
+[hidden] { display: none !important; }
+button, input { font: inherit; }
+.hero-pills { margin-top: 1.4rem; }
+.content figure > a { display: block; border: 0; }
+.content .architecture figcaption { text-align: left; }
+.content pre, .method-code code { overflow-wrap: anywhere; }
+#citation pre { white-space: pre-wrap; }
+.code-comment { color: #a4a4a0; }
+
+/* The same neutral cards, borders, type, and buttons as the reference page. */
+.explorer {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg);
+  margin: 1.75rem 0 1rem;
+}
+.explorer-controls {
+  display: none;
+  grid-template-columns: .9fr 1.4fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-subtle);
+}
+.js .explorer-controls { display: grid; }
+.explorer-controls fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.explorer-controls legend, .tiny-label {
+  display: block;
+  color: var(--ink-3);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.explorer-controls legend { margin-bottom: .65rem; }
+.option-group { display: flex; gap: .4rem; }
+.option-group label { position: relative; flex: 1; cursor: pointer; }
+.option-group input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.option-group label > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  min-height: 44px;
+  padding: .6rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--bg);
+  font-size: .78rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.option-group input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.option-group input:focus-visible + span { outline: 3px solid #737373; outline-offset: 3px; }
+.option-group small { font-size: .5rem; text-transform: uppercase; letter-spacing: .03em; opacity: .65; }
+.explorer-output { padding: 1.75rem; }
+.explorer-title { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+.content .explorer-title h3 { margin: 0; }
+.method-badge { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .65rem; border: 1px solid var(--line); border-radius: 100px; color: var(--ink-3); white-space: nowrap; }
+.method-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.content .method-facts p { font-size: .9rem; line-height: 1.75; margin: .5rem 0 1.5rem; }
+.formula-panel { background: var(--bg-subtle); padding: 1.3rem 1.5rem; border-radius: 10px; }
+.content .formula-panel pre { background: transparent; border: 0; border-radius: 0; color: var(--ink); padding: 0; margin: .75rem 0; white-space: pre-wrap; font-size: .9rem; line-height: 1.8; }
+.content .formula-panel p { font-size: .85rem; line-height: 1.8; margin: 0; }
+.method-code { display: grid; grid-template-columns: 115px 1fr; gap: .65rem 1rem; align-items: start; margin-top: 1.5rem; }
+.method-code .tiny-label { padding-top: .2rem; }
+.method-code code { font-size: .8rem; line-height: 1.8; background: transparent; padding: 0; }
+.content .method-note { font-size: .85rem; color: var(--ink-3); margin: 0 0 1.5rem; }
+.method-caveats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.content .method-caveats h3 { margin: .5rem 0 .65rem; font-size: 1.1rem; }
+.content .method-caveats p { font-size: .85rem; line-height: 1.8; }
+.reference-link { display: inline-block; margin-top: .25rem; font-size: .9rem; }
+.noscript-note { padding: 1rem 1.5rem; }
+
+@media (max-width: 1023px) {
+  .explorer-controls { grid-template-columns: 1fr; }
+  .route-options { max-width: 360px; }
+}
+@media (max-width: 820px) {
+  .method-facts, .method-caveats { grid-template-columns: 1fr; gap: 0; }
+  .explorer-output { padding: 1.25rem; }
+  .explorer-title { align-items: start; flex-wrap: wrap; gap: .75rem; }
+  .content .explorer-title h3 { font-size: 1.2rem; }
+  .content .method-caveats p { margin-bottom: 1.5rem; }
+  .method-code { grid-template-columns: 1fr; gap: .4rem; }
+  .method-code .command-label { margin-top: .7rem; }
+  .formula-panel { padding: 1rem; }
+}
+@media (max-width: 480px) {
+  .explorer-controls { padding: 1.25rem; }
+  .route-options { max-width: none; }
+  .estimator-options { display: grid; grid-template-columns: 1fr 1fr; }
+  .option-group label > span { padding-inline: .5rem; }
+  .content .formula-panel pre { font-size: .85rem; }
+  .hero .eyebrow { font-size: .64rem; letter-spacing: .14em; }
+  .hero .affiliations { font-size: .7rem; letter-spacing: .11em; }
+}
+
+@media (max-width: 380px) {
+  .hero .title { font-size: 2.4rem; }
+}
+
+/* Preserve access to every section when scripts are disabled. */
+html:not(.js) .navbar { position: relative; height: auto; min-height: var(--nav-h); padding-block: 1rem; background: var(--d-bg); }
+html:not(.js) .hero { padding-top: 0; }
+@media (max-width: 820px) {
+  html:not(.js) .navbar > .container { flex-wrap: wrap; gap: 1rem; }
+  html:not(.js) .navbar-menu { position: static; opacity: 1; visibility: visible; transform: none; width: 100%; }
+  html:not(.js) .navbar-end { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: .8rem 1.25rem; }
+  html:not(.js) .navbar-menu .navbar-item { font-size: .85rem; }
+}
+@media print {
+  .navbar, .hero-links, .explorer-controls, #copy-citation, .footer { display: none !important; }
+  .hero { background: white; color: black; padding: 0; min-height: auto; }
+  .hero::before, .hero::after { display: none; }
+  .hero .title, .hero .subtitle, .hero .highlight, .hero a, .eyebrow, .authors-list, .affiliations, .pill { color: black; }
+  .section.content-section { padding-block: 1.5rem; }
+  .explorer, pre { break-inside: avoid; }
+}

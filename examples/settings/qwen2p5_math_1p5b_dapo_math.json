@@ -1,0 +1,16 @@
+{
+  "model": "Qwen/Qwen2.5-Math-1.5B",
+  "agent_kind": "math",
+  "max_agent_turns": 1,
+  "flags": {
+    "data.max_samples": 7500,
+    "data.max_len": 6144,
+    "rollout.max_new_tokens": 4096,
+    "train.num_episodes": 68,
+    "train.micro_batch_size": 2,
+    "rollout.vllm_generate_batch_size": 128
+  },
+  "name": "qwen2p5_math_1p5b_dapo_math",
+  "description": "KLPO single-turn math experiment adapted from FlashREINFORCE; token regression + MC-KL by default.",
+  "source": "https://github.com/yifanzhang-pro/FlashREINFORCE/blob/a1ebe22/examples/settings/qwen2p5_math_1p5b_dapo_math.json"
+}

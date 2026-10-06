@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "klpo"
+version = "0.1.0"
+description = "Critic-free KL-Regularized Policy Optimization"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+readme = "README.md"
+dependencies = ["torch>=2.2"]
+
+[project.urls]
+Homepage = "https://yifanzhang-pro.github.io/KLPO/"
+Repository = "https://github.com/yifanzhang-pro/KLPO"
+Documentation = "https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithms.md"
+Paper = "https://yifanzhang-pro.github.io/KLPO/KLPO.pdf"
+Issues = "https://github.com/yifanzhang-pro/KLPO/issues"
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["klpo*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
