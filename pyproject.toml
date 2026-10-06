@@ -18,11 +18,20 @@ Documentation = "https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithm
 Paper = "https://yifanzhang-pro.github.io/KLPO/KLPO.pdf"
 Issues = "https://github.com/yifanzhang-pro/KLPO/issues"
 
-[project.optional-dependencies]
-test = ["pytest>=8"]
+[dependency-groups]
+dev = ["numpy", "pytest>=8"]  # numpy only silences a torch import warning
 
 [tool.setuptools.packages.find]
 include = ["klpo*"]
+
+[tool.uv.sources]
+# CPU wheels for the project environment on Linux; GPU training uses Molt's environment.
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

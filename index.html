@@ -85,22 +85,20 @@
 </div></div></section>
 <section id="implementation" class="section content-section"><div class="container"><h2 class="section-title">Implementation and quick start</h2><div class="content">
   <p>A CPU example to inspect the update, with a native Molt interface for model training. The toy policy uses variable-length responses, a terminal verifier, historical sampler versions, and repeated learner updates. No model or dataset download is needed.</p>
-  <p><strong>Requirements:</strong> Python 3.10+ and PyTorch 2.2+. Code is licensed under Apache 2.0.</p>
+  <p><strong>Requirements:</strong> <a href="https://docs.astral.sh/uv/">uv</a>, which sets up Python 3.10+ and PyTorch 2.2+ from the lockfile. Code is licensed under Apache 2.0.</p>
   <pre><code><span class="code-comment"># Clone and install</span>
 git clone https://github.com/yifanzhang-pro/KLPO.git
 cd KLPO
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[test]'
+uv sync
 
 <span class="code-comment"># Token regression + MC-KL (default, M=16)</span>
-python examples/train_toy.py
+uv run python examples/train_toy.py
 
 <span class="code-comment"># A single auxiliary draw is also valid</span>
-python examples/train_toy.py --mc-samples 1
+uv run python examples/train_toy.py --mc-samples 1
 
 <span class="code-comment"># Verify the loss implementation</span>
-python -m pytest -q</code></pre>
+uv run pytest -q</code></pre>
   <div class="table-container" tabindex="0" role="region" aria-label="Implementation resources"><table class="table"><thead><tr><th scope="col">Resource</th><th scope="col">Contents</th></tr></thead><tbody>
     <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/algorithms.md">Algorithm reference</a></th><td>All eight loss combinations, sampling contracts, and numerical stabilization.</td></tr>
     <tr><th scope="row"><a href="https://github.com/yifanzhang-pro/KLPO/blob/main/docs/training.md">Training guide</a></th><td>Pinned native Molt installation, R1/Qwen-Math launchers, and execution limits.</td></tr>

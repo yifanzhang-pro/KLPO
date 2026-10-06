@@ -109,7 +109,7 @@ The pinned backend requires synchronous collection, queue depth one, complete ba
 
 ```bash
 git submodule update --init --checkout external/labs-molt
-python -m pytest -q tests/test_multiturn.py
+uv run pytest -q tests/test_multiturn.py
 ```
 
 CPU tests execute the pinned trainer's argument parser and validation for all 40 setting/route/estimator combinations, check the single-turn default agent and required multi-turn agents, exercise the launch wrapper with a fake Ray backend, and check that tool-observation masks preserve complete-trajectory losses and gradients for all eight loss combinations. They do not run an actual tool environment, CUDA training, or a benchmark. Record seeds, dataset revisions, agent revision, checkpoint, and GPU layout with each real experiment before reporting results.

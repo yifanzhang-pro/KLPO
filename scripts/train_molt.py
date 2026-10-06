@@ -110,7 +110,8 @@ def main():
     try:
         import klpo
     except ImportError:
-        parser.error("Install this repository into the Molt training environment: pip install -e /path/to/KLPO")
+        parser.error("Install this repository into the Molt training environment: "
+                     "uv pip install --no-sources -e /path/to/KLPO")
     expected_package = Path(__file__).resolve().parents[1] / "klpo"
     if Path(klpo.__file__).resolve().parent != expected_package:
         parser.error("The imported klpo package is not this checkout; reinstall this repository")

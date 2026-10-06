@@ -17,8 +17,9 @@ There is no source transformation or runtime monkey patch.
 The fork is pinned as the `external/labs-molt` submodule (branch `feat/klpo-all-kl`).
 The submodule is marked `update = none`, so recursive clones of KLPO, including the
 project website, do not fetch it; check it out explicitly. In a Linux NVIDIA GPU
-environment, install the pinned fork and KLPO into the same environment on every
-Ray worker:
+environment, install the pinned fork and KLPO with uv into the same environment on
+every Ray worker, such as Molt's container or a virtual environment with Molt's CUDA
+PyTorch (add `--system` to `uv pip` outside a virtual environment):
 
 ```bash
 git clone https://github.com/yifanzhang-pro/KLPO.git
@@ -26,10 +27,15 @@ cd KLPO
 git submodule update --init --checkout external/labs-molt
 export KLPO_PATH="$PWD"
 export MOLT_PATH="$KLPO_PATH/external/labs-molt"
-pip install -e "$MOLT_PATH"
-pip install -e "$KLPO_PATH"
+uv pip install -e "$MOLT_PATH"
+uv pip install --no-sources -e "$KLPO_PATH"
 python scripts/check_molt.py
 ```
+
+`--no-sources` keeps KLPO's CPU-wheel source for `torch`, which applies only to the
+`uv sync` development environment, from replacing Molt's CUDA PyTorch. Run the GPU
+launchers below with that environment's `python`, not `uv run`, which uses KLPO's
+CPU-only `.venv`.
 
 `check_molt.py` is read-only. It checks that the backend is at the commit recorded
 by the submodule, exposes the native API version, and has no tracked modifications.
@@ -154,8 +160,8 @@ require checking the assumptions behind the exact sequence-regression identity.
 ## Optional token and sequence regression combinations
 
 ```bash
-python examples/train_toy.py --route token --kl-estimator binary
-python examples/train_toy.py --route sequence --kl-estimator topk --top-k 16
+uv run python examples/train_toy.py --route token --kl-estimator binary
+uv run python examples/train_toy.py --route sequence --kl-estimator topk --top-k 16
 ```
 
 The first uses `klpo_token_loss(..., kl_estimator="binary")`:

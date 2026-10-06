@@ -27,18 +27,16 @@ KLPO is a critic-free, single-rollout method for off-policy agentic reinforcemen
 
 ## Quick start
 
-Requires Python 3.10+ and PyTorch 2.2+. The toy example runs on CPU without a model or dataset download.
+Requires [uv](https://docs.astral.sh/uv/). `uv sync` creates `.venv` from `uv.lock` with Python 3.10+, PyTorch 2.2+ (CPU wheels on Linux), and pytest. The toy example runs on CPU without a model or dataset download.
 
 ```bash
 git clone https://github.com/yifanzhang-pro/KLPO.git
 cd KLPO
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[test]'
+uv sync
 
-python examples/train_toy.py  # Default: token regression + MC-KL, M=16
-python examples/train_toy.py --mc-samples 1
-python -m pytest -q
+uv run python examples/train_toy.py  # Default: token regression + MC-KL, M=16
+uv run python examples/train_toy.py --mc-samples 1
+uv run pytest -q
 ```
 
 The example uses variable-length responses, a terminal verifier, historical sampler versions, and repeated learner updates. **M counts independent auxiliary tokens per prefix**; token regression supports M ≥ 1. The example is an implementation check, not a benchmark reproduction.
@@ -112,7 +110,7 @@ CPU tests cover all eight combinations, independent MC gradient expectations, le
 
 ```bash
 git submodule update --init --checkout external/labs-molt
-python -m pytest -q
+uv run pytest -q
 ```
 
 This release provides the theory, loss implementation, CPU verification, and native training integration. **GPU training and paper-scale benchmark reproduction have not been validated.** Example hyperparameters are starting values, not tuned benchmark settings. Multi-turn tests cover native command validation, worker environment propagation, and complete-trajectory masking. The supported synchronous recipes consume each auxiliary record bank once; fixed-record reuse remains an empirical surrogate rather than a fresh conditionally unbiased MC estimate.

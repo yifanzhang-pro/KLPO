@@ -109,13 +109,13 @@ prompt-and-version normalization.
 Choose another combination explicitly:
 
 ```bash
-python examples/train_toy.py --kl-estimator topk --top-k 16
-python examples/train_toy.py --kl-estimator binary
-python examples/train_toy.py --kl-estimator full
-python examples/train_toy.py --route sequence --mc-samples 8
-python examples/train_toy.py --route sequence --kl-estimator topk --top-k 16
-python examples/train_toy.py --route sequence --kl-estimator binary
-python examples/train_toy.py --route sequence --kl-estimator full
+uv run python examples/train_toy.py --kl-estimator topk --top-k 16
+uv run python examples/train_toy.py --kl-estimator binary
+uv run python examples/train_toy.py --kl-estimator full
+uv run python examples/train_toy.py --route sequence --mc-samples 8
+uv run python examples/train_toy.py --route sequence --kl-estimator topk --top-k 16
+uv run python examples/train_toy.py --route sequence --kl-estimator binary
+uv run python examples/train_toy.py --route sequence --kl-estimator full
 ```
 
 For a deterministic local KL `k`, the routes differ in their detached feedback:
@@ -322,7 +322,7 @@ the native worker interface in the pinned Molt fork:
 
 ```bash
 git submodule update --init --checkout external/labs-molt
-python -m pytest -q
+uv run pytest -q
 ```
 
 GPU training and paper-scale benchmark reproduction require a compatible Linux
