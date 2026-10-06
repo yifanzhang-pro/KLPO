@@ -85,6 +85,14 @@ Token regression uses per-token feedback; sequence regression uses trajectory fe
 | [Paper](KLPO.pdf) · [LaTeX source](https://github.com/yifanzhang-pro/RPG-2-Overleaf) | Derivations, proofs, assumptions, and SKLPO comparison |
 | [Website maintenance](docs/website.md) | Local preview, GitHub Pages publication, and updating the paper snapshot |
 
+GPU training uses the [labs-molt KLPO fork](https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl), pinned as the `external/labs-molt` submodule. The submodule is marked `update = none`, so `git clone --recursive` does not fetch it; check it out explicitly before training or running the backend tests:
+
+```bash
+git submodule update --init --checkout external/labs-molt
+```
+
+The CPU example and the remaining tests run without it. The launchers and `scripts/check_molt.py` use this checkout by default; see the [training guide](docs/training.md#native-molt-integration).
+
 All recipes default to `--route token --kl-estimator mc --mc-samples 16`. The pinned backend requires synchronous collection with complete trajectories and one update per batch. The unified `examples/run_experiment.py` launcher sets this automatically for single-turn and multi-turn settings; pass `--sync` to the retained `scripts/train_molt.py` launcher (its asynchronous switches are not supported by the current pin). GPU training requires a compatible Linux/CUDA environment; follow the training guide.
 
 Preview single-turn and multi-turn experiments without installing Molt:
