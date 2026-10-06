@@ -11,6 +11,6 @@ Experiment source snapshot: a1ebe22 (examples/).
 
 The optional integration targets the KLPO branch of the NVIDIA-NeMo/labs-molt
 fork at https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl,
-pinned to revision 913e2975d4be5c634a444445fed656e984c2cdba. Molt remains a
+pinned through the external/labs-molt submodule. Molt remains a
 separately installed project and retains its own NVIDIA and OpenRLHF notices
 and licenses.

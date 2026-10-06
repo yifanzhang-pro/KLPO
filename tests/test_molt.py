@@ -85,11 +85,12 @@ def test_training_sync_is_an_explicit_fallback():
 
 
 def test_native_backend_version_and_worker_contract():
-    root = os.environ.get('MOLT_SOURCE_PATH')
+    root = os.environ.get('MOLT_SOURCE_PATH') or (
+        BACKEND.MOLT_SUBMODULE if (BACKEND.MOLT_SUBMODULE / 'molt/__init__.py').exists() else None)
     if root is None:
-        pytest.skip('Set MOLT_SOURCE_PATH to the native labs-molt fork')
+        pytest.skip('Check out external/labs-molt or set MOLT_SOURCE_PATH to the native labs-molt fork')
     root = Path(root)
-    assert 'KLPO_API_VERSION = 2' in (root / 'molt/__init__.py').read_text()
+    assert 'KLPO_API_VERSION = 1' in (root / 'molt/__init__.py').read_text()
     actor = (root / 'molt/trainer/workers/policy_actor.py').read_text()
     for contract in ('from klpo.molt import KLPOLoss', 'kl_estimator=self.args.actor.klpo_kl_estimator',
                      '"rewards": experience.rewards', 'global_batch_size=batch_num_seqs',

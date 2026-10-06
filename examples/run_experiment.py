@@ -15,7 +15,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from check_molt import MOLT_REVISION, verify_backend
+from check_molt import MOLT_REVISION, MOLT_SUBMODULE, verify_backend
 
 SETTINGS = Path(__file__).resolve().parent / "settings"
 SETTING_NAMES = sorted(path.stem for path in SETTINGS.glob("*.json")
@@ -51,7 +51,8 @@ def main():
     parser.add_argument("--mc-samples", type=int, default=16)
     parser.add_argument("--top-k", type=int, default=16)
     parser.add_argument("--tail-floor", type=float, default=1e-6)
-    parser.add_argument("--molt-path", type=Path)
+    parser.add_argument("--molt-path", type=Path, default=MOLT_SUBMODULE,
+                        help="labs-molt checkout (default: the external/labs-molt submodule)")
     parser.add_argument("--agent-path", type=Path,
                         help="Molt Env/ChatAgent; math settings default to Molt's single-turn math agent")
     parser.add_argument("--model", help="Override the setting's model with a checkpoint or HF ID")
@@ -93,7 +94,7 @@ def main():
     if args.print_config:
         print(json.dumps(config, indent=2))
         return
-    for required in ("molt_path", "train_data", "eval_data", "actor_gpus", "rollout_engines"):
+    for required in ("train_data", "eval_data", "actor_gpus", "rollout_engines"):
         if getattr(args, required) is None:
             parser.error(f'--{required.replace("_", "-")} is required to build a command')
     if min(args.actor_nodes, args.actor_gpus, args.rollout_engines, args.rollout_tp,

@@ -14,22 +14,28 @@ trainer scoring, FSDP2, accumulation, evaluation, and checkpoints. Its native
 `actor.loss_mode=klpo` invokes `klpo.molt.KLPOLoss` for the regression formulas.
 There is no source transformation or runtime monkey patch.
 
-In a Linux NVIDIA GPU environment, install the pinned fork and KLPO into the
-same environment on every Ray worker:
+The fork is pinned as the `external/labs-molt` submodule (branch `feat/klpo-all-kl`).
+The submodule is marked `update = none`, so recursive clones of KLPO, including the
+project website, do not fetch it; check it out explicitly. In a Linux NVIDIA GPU
+environment, install the pinned fork and KLPO into the same environment on every
+Ray worker:
 
 ```bash
-git clone --branch feat/klpo-all-kl https://github.com/yifanzhang-pro/labs-molt.git labs-molt-klpo
-git -C labs-molt-klpo checkout --detach 913e2975d4be5c634a444445fed656e984c2cdba
-export MOLT_PATH="$PWD/labs-molt-klpo"
-export KLPO_PATH=/absolute/path/to/KLPO
+git clone https://github.com/yifanzhang-pro/KLPO.git
+cd KLPO
+git submodule update --init --checkout external/labs-molt
+export KLPO_PATH="$PWD"
+export MOLT_PATH="$KLPO_PATH/external/labs-molt"
 pip install -e "$MOLT_PATH"
 pip install -e "$KLPO_PATH"
-python "$KLPO_PATH/scripts/check_molt.py" --molt-path "$MOLT_PATH"
+python scripts/check_molt.py
 ```
 
-`check_molt.py` is read-only. It checks the source revision, native API version,
-and tracked-file cleanliness. The launcher repeats this check before starting.
-Use this clean native checkout instead of an older source-patched backend.
+`check_molt.py` is read-only. It checks that the backend is at the commit recorded
+by the submodule, exposes the native API version, and has no tracked modifications.
+The launchers repeat this check before starting and default `--molt-path` to the
+submodule. To move the pin, check out the new fork commit in `external/labs-molt`
+and commit the updated submodule.
 
 | Launcher option | Native Molt option | Meaning |
 | --- | --- | --- |

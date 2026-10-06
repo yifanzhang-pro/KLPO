@@ -11,7 +11,7 @@ import shlex
 import subprocess
 import sys
 
-from check_molt import MOLT_REVISION, verify_backend
+from check_molt import MOLT_REVISION, MOLT_SUBMODULE, verify_backend
 
 
 def main():
@@ -23,7 +23,8 @@ def main():
     parser.add_argument("--top-k", type=int, default=16, help="TopK-KL head size K")
     parser.add_argument("--mc-samples", type=int, default=16, help="Independent MC samples M per prefix")
     parser.add_argument("--tail-floor", type=float, default=1e-6)
-    parser.add_argument("--molt-path", type=Path, required=True)
+    parser.add_argument("--molt-path", type=Path, default=MOLT_SUBMODULE,
+                        help="labs-molt checkout (default: the external/labs-molt submodule)")
     parser.add_argument("--model", required=True, help="Local checkpoint or Hugging Face model ID")
     parser.add_argument("--train-data", required=True, type=Path)
     parser.add_argument("--eval-data", required=True, type=Path)

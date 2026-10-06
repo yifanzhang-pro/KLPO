@@ -100,10 +100,11 @@ The [experiment guide](examples/README.md) provides all five launch settings, ag
 
 ## Validation and scope
 
-CPU tests cover all eight combinations, independent MC gradient expectations, leave-one-out residuals, M=1 token updates, TopK-KL tail corrections, masked/extreme probabilities, and trajectory/microbatch normalization. To also check the native backend contract:
+CPU tests cover all eight combinations, independent MC gradient expectations, leave-one-out residuals, M=1 token updates, TopK-KL tail corrections, masked/extreme probabilities, and trajectory/microbatch normalization. To also check the native backend contract, check out the pinned `external/labs-molt` submodule first; the tests then use it automatically:
 
 ```bash
-MOLT_SOURCE_PATH=/path/to/labs-molt python -m pytest -q
+git submodule update --init --checkout external/labs-molt
+python -m pytest -q
 ```
 
 This release provides the theory, loss implementation, CPU verification, and native training integration. **GPU training and paper-scale benchmark reproduction have not been validated.** Example hyperparameters are starting values, not tuned benchmark settings. Multi-turn tests cover native command validation, worker environment propagation, and complete-trajectory masking. The supported synchronous recipes consume each auxiliary record bank once; fixed-record reuse remains an empirical surrogate rather than a fresh conditionally unbiased MC estimate.

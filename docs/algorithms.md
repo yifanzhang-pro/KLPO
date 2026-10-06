@@ -321,7 +321,8 @@ gradient normalization. An optional contract test checks
 the native worker interface in the pinned Molt fork:
 
 ```bash
-MOLT_SOURCE_PATH=/path/to/labs-molt python -m pytest -q
+git submodule update --init --checkout external/labs-molt
+python -m pytest -q
 ```
 
 GPU training and paper-scale benchmark reproduction require a compatible Linux

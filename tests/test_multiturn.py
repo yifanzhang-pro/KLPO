@@ -36,9 +36,10 @@ def native_cli():
     Common argument helpers are stdlib-only. Only the training call and imports
     outside the CLI's __main__ block are excluded; validation isn't reimplemented.
     """
-    source = os.environ.get("MOLT_SOURCE_PATH")
+    source = os.environ.get("MOLT_SOURCE_PATH") or (
+        EXPERIMENT.MOLT_SUBMODULE if (EXPERIMENT.MOLT_SUBMODULE / "molt/__init__.py").exists() else None)
     if source is None:
-        pytest.skip("Set MOLT_SOURCE_PATH to check commands against the pinned backend")
+        pytest.skip("Check out external/labs-molt or set MOLT_SOURCE_PATH to check commands against the pinned backend")
     root = Path(source)
     EXPERIMENT.verify_backend(root)
     namespace = {"argparse": argparse}

@@ -1,0 +1,5 @@
+[submodule "external/labs-molt"]
+	path = external/labs-molt
+	url = https://github.com/yifanzhang-pro/labs-molt.git
+	branch = feat/klpo-all-kl
+	update = none

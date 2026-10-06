@@ -5,9 +5,22 @@ import ast
 from pathlib import Path
 import subprocess
 
+ROOT = Path(__file__).resolve().parents[1]
 MOLT_REPOSITORY = "https://github.com/yifanzhang-pro/labs-molt.git"
-MOLT_REVISION = "913e2975d4be5c634a444445fed656e984c2cdba"
-KLPO_API_VERSION = 2
+MOLT_SUBMODULE = ROOT / "external" / "labs-molt"
+KLPO_API_VERSION = 1
+
+
+def pinned_revision():
+    """Return the labs-molt commit recorded by the external/labs-molt submodule."""
+    entry = subprocess.check_output(["git", "-C", str(ROOT), "ls-files", "--stage", "--", "external/labs-molt"],
+                                    text=True).split()
+    if len(entry) < 2 or entry[0] != "160000":
+        raise RuntimeError("external/labs-molt is not a submodule of this KLPO checkout")
+    return entry[1]
+
+
+MOLT_REVISION = pinned_revision()
 
 
 def verify_backend(root: Path):
@@ -25,7 +38,8 @@ def verify_backend(root: Path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--molt-path", required=True, type=Path)
+    parser.add_argument("--molt-path", type=Path, default=MOLT_SUBMODULE,
+                        help="labs-molt checkout (default: the external/labs-molt submodule)")
     args = parser.parse_args()
     verify_backend(args.molt_path.expanduser().resolve())
     print(f"Native KLPO backend verified at {MOLT_REVISION}")
