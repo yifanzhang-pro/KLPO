@@ -49,7 +49,7 @@ and commit the updated submodule.
 | `--kl-estimator mc|topk|binary|full` | `--actor.klpo_kl_estimator` | Conditional KL estimator; default: MC-KL |
 | `--mc-samples 16` | `--actor.klpo_mc_samples` | Default MC-KL: IID draws M per prefix, with replacement |
 | `--top-k 16` | `--actor.klpo_top_k` | Optional TopK-KL: head size K, capped at vocabulary size |
-| `--beta 1e-3` | `--actor.klpo_beta` | Regularization strength |
+| `--beta 1e-3` | `--actor.klpo_beta` | Regularization strength; default 1e-3 (1e-4 also works), 0 gives score centering |
 | `--tail-floor 1e-6` | `--actor.klpo_tail_floor` | TopK-KL tail stabilization |
 
 Token MC-KL allows M=1; sequence MC-KL requires M >= 2 for independent

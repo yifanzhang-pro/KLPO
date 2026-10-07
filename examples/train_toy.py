@@ -58,8 +58,8 @@ def main():
     args = parser.parse_args()
     if min(args.updates, args.batch_size, args.max_tokens, args.reuse, args.publish_every, args.top_k, args.mc_samples) < 1:
         parser.error('counts must be positive')
-    if not math.isfinite(args.lr) or args.lr <= 0 or not math.isfinite(args.beta) or args.beta <= 0:
-        parser.error('lr and beta must be positive and finite')
+    if not math.isfinite(args.lr) or args.lr <= 0 or not math.isfinite(args.beta) or args.beta < 0:
+        parser.error('lr must be positive and finite; beta must be finite and nonnegative')
     estimator = args.kl_estimator
     if estimator == 'mc' and args.route == 'sequence' and args.mc_samples < 2:
         parser.error('sequence MC-KL needs --mc-samples >= 2')

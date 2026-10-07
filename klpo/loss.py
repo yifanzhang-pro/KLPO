@@ -3,6 +3,8 @@
 All routes sum policy tokens and average complete trajectories, with no IS,
 reward centering, ratio clipping, admission mask, or trajectory-length normalization.
 Returned scalars are backward surrogates, not regression loss values.
+beta = 0 gives the score-centered update (the paper's beta -> 0+ extension); the
+squared-residual regression_loss has a 1/beta pole there and is omitted.
 """
 
 import math
@@ -10,7 +12,7 @@ import math
 import torch
 from torch import Tensor
 
-from ._validation import conditionals, finite_result, mc_records, prepare
+from ._validation import conditionals, finite_result, mc_records, prepare, with_regression
 
 
 def _log1mexp(x: Tensor) -> Tensor:
@@ -61,16 +63,14 @@ def klpo_sequence_loss(
     binary_kl, centered_ratio, correction = _binary_terms(current, behavior, action_mask)
     with torch.no_grad():
         residual = returns - beta * centered_ratio.sum(-1)
-        regression = residual.square() / (2 * beta)
     loss = -(residual * (correction * current).sum(-1)).mean()
-    finite_result(loss, residual, correction, regression)
-    return loss, {
+    finite_result(loss, residual, correction)
+    return loss, with_regression({
         "residual": residual,
-        "regression_loss": regression.mean(),
         "sequence_kl": binary_kl.sum(-1),
         "correction": correction,
         "policy_tokens": lengths,
-    }
+    }, residual.square(), beta)
 
 
 def klpo_sequence_full_loss(
@@ -101,15 +101,13 @@ def klpo_sequence_full_loss(
     safe_q_log = q_log.masked_fill(torch.isneginf(q_log), 0.0)
     local_kl = (q * (safe_q_log - p_log)).sum(-1).masked_fill(~action_mask, 0.0)
     residual = (returns - beta * (current - behavior + local_kl).sum(-1)).detach()
-    regression = residual.square() / (2 * beta)
     loss = -(residual * (current + local_kl).sum(-1)).mean()
-    finite_result(loss, residual, regression)
-    return loss, {
+    finite_result(loss, residual)
+    return loss, with_regression({
         "residual": residual,
-        "regression_loss": regression.mean(),
         "sequence_kl": local_kl.detach().sum(-1),
         "policy_tokens": lengths,
-    }
+    }, residual.square(), beta)
 
 
 def klpo_sequence_topk_loss(
@@ -160,18 +158,16 @@ def klpo_sequence_topk_loss(
     local_kl = (q * (safe_q_log - p_log)).sum(-1) + q_tail * (q_tail.log() - p_tail.log())
     local_kl = local_kl.masked_fill(~action_mask, 0.0)
     residual = (returns - beta * (current - behavior + local_kl).sum(-1)).detach()
-    regression = residual.square() / (2 * beta)
     loss = -(residual * (current + local_kl).sum(-1)).mean()
-    finite_result(loss, local_kl, residual, regression)
-    return loss, {
+    finite_result(loss, local_kl, residual)
+    return loss, with_regression({
         "residual": residual,
-        "regression_loss": regression.mean(),
         "sequence_kl": local_kl.detach().sum(-1),
         "sampler_tail_mass": sampler_tail.detach().masked_fill(~action_mask, 0.0),
         "trainer_tail_mass": trainer_tail.detach().masked_fill(~action_mask, 0.0),
         "floored_tokens": (((sampler_tail < tail_floor) | (trainer_tail < tail_floor)) & action_mask).sum(),
         "policy_tokens": lengths,
-    }
+    }, residual.square(), beta)
 
 
 def klpo_sequence_mc_loss(
@@ -221,17 +217,16 @@ def klpo_sequence_mc_loss(
         residual = residuals.mean(-1)
         centered = residuals - residual[:, None]
         other_residual = residual[:, None] - centered / (m - 1)
-        regression = (residual.square() - centered.square().mean(-1) / (m - 1)) / (2 * beta)
+        cross_product = residual.square() - centered.square().mean(-1) / (m - 1)
     corrected = current.sum(-1)[:, None] - p_log.sum(1)
     loss = -(other_residual * corrected).mean(-1).mean()
-    finite_result(loss, ratio, residuals, other_residual, regression)
-    return loss, {
+    finite_result(loss, ratio, residuals, other_residual)
+    return loss, with_regression({
         "residual": residual,
-        "regression_loss": regression.mean(),
         "sequence_kl": ratio.mean(-1).sum(-1),
         "mc_samples": torch.tensor(m, device=current.device),
         "policy_tokens": lengths,
-    }
+    }, cross_product, beta)
 
 
 def klpo_token_loss(

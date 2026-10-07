@@ -20,8 +20,8 @@ class KLPOLoss(nn.Module):
     def __init__(self, beta: float = 1e-3, *, route: str = "token",
                  kl_estimator: str = "mc", tail_floor: float = 1e-6):
         super().__init__()
-        if not math.isfinite(beta) or beta <= 0:
-            raise ValueError("beta must be positive and finite")
+        if not math.isfinite(beta) or beta < 0:
+            raise ValueError("beta must be finite and nonnegative")
         if route not in {"sequence", "token"}:
             raise ValueError("route must be sequence or token")
         if kl_estimator not in {"binary", "topk", "mc", "full"}:
@@ -82,6 +82,7 @@ class KLPOLoss(nn.Module):
         scaled_loss = loss * (log_probs.shape[0] * dp_size / count)
         zero = loss.detach().new_zeros(())
         conditional_kl = stats['sequence_kl'].sum() / stats['policy_tokens'].sum()
-        # Token regression's backward surrogate is not a squared regression loss.
-        reported = stats['regression_loss'] if self.route == "sequence" else loss.detach()
+        # Token regression's backward surrogate is not a squared regression loss,
+        # and at beta = 0 sequence regression has none either.
+        reported = stats.get('regression_loss', loss.detach()) if self.route == "sequence" else loss.detach()
         return scaled_loss, reported, zero, conditional_kl, conditional_kl, zero

@@ -17,8 +17,8 @@ def prepare(log_probs, behavior_log_probs, rewards, action_mask, beta):
         raise ValueError("action_mask must be boolean")
     if any(t.device != log_probs.device for t in (behavior_log_probs, rewards, action_mask)):
         raise ValueError("all inputs must be on the same device")
-    if not math.isfinite(beta) or beta <= 0:
-        raise ValueError("beta must be positive and finite")
+    if not math.isfinite(beta) or beta < 0:
+        raise ValueError("beta must be finite and nonnegative")
     if not torch.isfinite(rewards).all():
         raise ValueError("rewards must be finite")
     lengths = action_mask.sum(-1)
@@ -67,6 +67,15 @@ def conditionals(current: Tensor, behavior: Tensor, mask: Tensor, dtype, *, full
 def finite_result(loss, *values):
     if not torch.isfinite(loss).all() or any(not torch.isfinite(x).all() for x in values):
         raise FloatingPointError("KLPO arithmetic overflow; inspect probabilities/rewards or use float64")
+
+
+def with_regression(stats: dict, squared: Tensor, beta: float) -> dict:
+    """Report squared/(2*beta). At beta = 0 that loss has a 1/beta pole; only the update is defined."""
+    if beta > 0:
+        regression = squared / (2 * beta)
+        finite_result(regression)
+        stats["regression_loss"] = regression.mean()
+    return stats
 
 
 def mc_records(current: Tensor, behavior: Tensor, mask: Tensor, dtype):

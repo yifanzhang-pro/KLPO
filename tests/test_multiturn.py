@@ -98,7 +98,7 @@ def test_only_single_turn_math_defaults_to_builtin_agent(setting, tmp_path, monk
 
 @pytest.mark.parametrize("extra, message", [
     (["--route", "sequence", "--mc-samples", "1"], "M >= 2"),
-    (["--beta", "nan"], "positive and finite"),
+    (["--beta", "nan"], "finite and nonnegative"),
     (["--top-k", "0"], "K/M must be positive"),
     (["--episodes", "0"], "episodes must be positive"),
 ])

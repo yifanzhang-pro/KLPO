@@ -10,7 +10,11 @@ This is the paper's Figure 1 and the default for the library, CPU example, and
 Molt launcher. Let `p` be the current trainer policy, `q` the actual historical
 sampler, `R` the terminal reward, and `ell = log(p_action) - log(q_action)`.
 M counts auxiliary token draws per prefix, not full response rollouts; the
-launchers default to M=16, and token regression allows any M >= 1.
+launchers default to M=16, and token regression allows any M >= 1. The default
+regularization strength is `beta=1e-3` (`1e-4` also works). `beta=0` is accepted:
+it is the paper's beta -> 0+ limit, the score-centered policy gradient with
+coefficient `R`, and the squared-residual `regression_loss` is then omitted
+because it has a 1/beta pole.
 
 At each visited prefix draw `v_j ~ q` IID **with replacement**, independently of
 the complete rollout and across prefixes. Store the M token IDs and their
@@ -326,6 +330,7 @@ uv run pytest -q
 ```
 
 GPU training and paper-scale benchmark reproduction require a compatible Linux
-CUDA environment; the local verification is CPU-based. `beta=1e-3` and the
-inherited model-training hyperparameters are starting values, not tuned KLPO
-benchmark settings.
+CUDA environment; the local verification is CPU-based. The default
+`beta=1e-3` (or `1e-4`) is the tested token-level setting; the inherited
+model-training hyperparameters are starting values, not tuned KLPO benchmark
+settings.

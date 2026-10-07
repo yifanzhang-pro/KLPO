@@ -71,8 +71,8 @@ def main():
     parser.add_argument("--print-config", action="store_true", help="Print merged settings without GPU dependencies")
     parser.add_argument("--dry-run", action="store_true", help="Preview the command without starting training")
     args = parser.parse_args()
-    if not math.isfinite(args.beta) or args.beta <= 0:
-        parser.error("beta must be positive and finite")
+    if not math.isfinite(args.beta) or args.beta < 0:
+        parser.error("beta must be finite and nonnegative")
     if args.mc_samples < 1 or args.top_k < 1 or not 0 < args.tail_floor < 1:
         parser.error("K/M must be positive; tail-floor must be in (0, 1)")
     if args.route == "sequence" and args.kl_estimator == "mc" and args.mc_samples < 2:

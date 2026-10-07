@@ -3,7 +3,8 @@ import math
 import pytest
 import torch
 
-from klpo import klpo_sequence_full_loss, klpo_sequence_loss, klpo_token_loss, klpo_sequence_topk_loss
+from klpo import (klpo_sequence_full_loss, klpo_sequence_loss, klpo_sequence_mc_loss, klpo_sequence_topk_loss,
+                  klpo_token_loss)
 
 
 def test_binary_gradient_equals_squared_residual_not_importance_sampling():
@@ -198,7 +199,31 @@ def test_topk_kl_derivative_supplies_score_centering_correction():
     torch.testing.assert_close(kl_grad, -correction_grad)
 
 
-@pytest.mark.parametrize('invalid', ['zero_current', 'zero_behavior', 'empty_row', 'nan', 'positive', 'beta_zero', 'beta_inf', 'beta_nan', 'shape', 'mask_dtype', 'reward_nan', 'integer'])
+def test_beta_zero_is_the_score_centered_update_on_both_routes():
+    torch.manual_seed(3)
+    logits = torch.randn(2, 3, 4, dtype=torch.float64, requires_grad=True)
+    sampler = torch.log_softmax(torch.randn(2, 3, 4, dtype=torch.float64), -1)
+    actions, draws = torch.randint(4, (2, 3, 1)), torch.randint(4, (2, 3, 2))
+    rewards, mask = torch.tensor([1., -.5], dtype=torch.float64), torch.ones(2, 3, dtype=torch.bool)
+    logp = torch.log_softmax(logits, -1)
+    args = (logp.gather(-1, actions)[..., 0], sampler.gather(-1, actions)[..., 0], rewards, mask)
+    full = dict(full_log_probs=logp, behavior_full_log_probs=sampler)
+    mc = dict(mc_log_probs=logp.gather(-1, draws), behavior_mc_log_probs=sampler.gather(-1, draws))
+    centered = args[0] - (sampler.exp() * logp).sum(-1)
+    expected, = torch.autograd.grad(-(rewards[:, None] * centered).sum(-1).mean(), logits, retain_graph=True)
+    sequence, stats = klpo_sequence_full_loss(*args, **full, beta=0.)
+    token, _ = klpo_token_loss(*args, kl_estimator='full', conditional_log_probs=logp,
+                               behavior_conditional_log_probs=sampler, beta=0.)
+    for loss in (sequence, token):
+        torch.testing.assert_close(torch.autograd.grad(loss, logits, retain_graph=True)[0], expected)
+    assert 'regression_loss' not in stats
+    mc_sequence, _ = klpo_sequence_mc_loss(*args, **mc, beta=0.)
+    mc_token, _ = klpo_token_loss(*args, **mc, beta=0.)
+    torch.testing.assert_close(torch.autograd.grad(mc_sequence, logits, retain_graph=True)[0],
+                               torch.autograd.grad(mc_token, logits)[0])
+
+
+@pytest.mark.parametrize('invalid', ['zero_current', 'zero_behavior', 'empty_row', 'nan', 'positive', 'beta_negative', 'beta_inf', 'beta_nan', 'shape', 'mask_dtype', 'reward_nan', 'integer'])
 def test_bad_inputs_fail_explicitly(invalid):
     current, old = torch.full((2, 3), -1.), torch.full((2, 3), -2.)
     reward, mask, beta = torch.ones(2), torch.ones(2, 3, dtype=torch.bool), .1
@@ -207,7 +232,7 @@ def test_bad_inputs_fail_explicitly(invalid):
     if invalid == 'empty_row': mask[0] = False
     if invalid == 'nan': current[0, 0] = float('nan')
     if invalid == 'positive': old[0, 0] = .1
-    if invalid == 'beta_zero': beta = 0
+    if invalid == 'beta_negative': beta = -.1
     if invalid == 'beta_inf': beta = math.inf
     if invalid == 'beta_nan': beta = math.nan
     if invalid == 'shape': old = old[:, :2]
