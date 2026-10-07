@@ -45,7 +45,7 @@ loss, stats = klpo_token_loss(
     logps, sampler_logps, rewards, action_mask,
     mc_log_probs=current_full_logps.gather(-1, stored_mc_ids),
     behavior_mc_log_probs=stored_mc_logps,
-    beta=0.1,  # kl_estimator="mc" is the default.
+    beta=1e-3,  # kl_estimator="mc" is the default.
 )
 optimizer.zero_grad()
 loss.backward()
@@ -163,7 +163,7 @@ as KLPO sequence regression + Binary KL. There is no trajectory residual in this
 from klpo import klpo_token_loss
 
 loss, stats = klpo_token_loss(
-    logps, sampler_logps, rewards, action_mask, kl_estimator="binary", beta=0.1,
+    logps, sampler_logps, rewards, action_mask, kl_estimator="binary", beta=1e-3,
 )
 ```
 
@@ -201,7 +201,7 @@ loss, stats = klpo_sequence_mc_loss(
     logps, sampler_logps, rewards, action_mask,
     mc_log_probs=current_full_logps.gather(-1, stored_mc_ids),
     behavior_mc_log_probs=stored_mc_logps,
-    beta=0.1,  # M >= 2 for leave-one-out residuals.
+    beta=1e-3,  # M >= 2 for leave-one-out residuals.
 )
 ```
 
@@ -242,7 +242,7 @@ from klpo import klpo_sequence_loss
 
 # logps, sampler_logps, action_mask: [B, T]; rewards: [B]
 # logps retains the current model's autograd graph.
-loss, stats = klpo_sequence_loss(logps, sampler_logps, rewards, action_mask, beta=0.1)
+loss, stats = klpo_sequence_loss(logps, sampler_logps, rewards, action_mask, beta=1e-3)
 optimizer.zero_grad()
 loss.backward()
 optimizer.step()
@@ -280,7 +280,7 @@ in either route. With inactive floors, both use the same coarsened-KL derivative
 from klpo import klpo_sequence_topk_loss
 
 loss, stats = klpo_sequence_topk_loss(  # For tokens: klpo_token_loss(..., kl_estimator="topk").
-    logps, sampler_logps, rewards, action_mask, beta=0.1,
+    logps, sampler_logps, rewards, action_mask, beta=1e-3,
     conditional_log_probs=current_full_logps.gather(-1, stored_head_ids),
     behavior_conditional_log_probs=stored_head_logps,
 )
@@ -326,6 +326,6 @@ uv run pytest -q
 ```
 
 GPU training and paper-scale benchmark reproduction require a compatible Linux
-CUDA environment; the local verification is CPU-based. `beta=0.1` and the
+CUDA environment; the local verification is CPU-based. `beta=1e-3` and the
 inherited model-training hyperparameters are starting values, not tuned KLPO
 benchmark settings.

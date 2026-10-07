@@ -47,7 +47,7 @@ def main():
     parser.add_argument("--setting", choices=SETTING_NAMES, required=True)
     parser.add_argument("--route", choices=["token", "sequence"], default="token")
     parser.add_argument("--kl-estimator", choices=["mc", "topk", "binary", "full"], default="mc")
-    parser.add_argument("--beta", type=float, default=0.1)
+    parser.add_argument("--beta", type=float, default=1e-3)
     parser.add_argument("--mc-samples", type=int, default=16)
     parser.add_argument("--top-k", type=int, default=16)
     parser.add_argument("--tail-floor", type=float, default=1e-6)

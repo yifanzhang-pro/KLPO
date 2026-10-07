@@ -41,7 +41,7 @@
   "train.force_sync_mode": true,
   "actor.klpo_route": "token",
   "actor.klpo_kl_estimator": "mc",
-  "actor.klpo_beta": 0.1,
+  "actor.klpo_beta": 1e-3,
   "actor.klpo_mc_samples": 16,
   "actor.klpo_top_k": 16,
   "actor.klpo_tail_floor": 1e-06,

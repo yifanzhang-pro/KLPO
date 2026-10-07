@@ -17,7 +17,7 @@ from .loss import (klpo_sequence_loss, klpo_sequence_topk_loss, klpo_sequence_fu
 class KLPOLoss(nn.Module):
     loss_agg_mode = "seq-mean-token-sum"
 
-    def __init__(self, beta: float = 0.1, *, route: str = "token",
+    def __init__(self, beta: float = 1e-3, *, route: str = "token",
                  kl_estimator: str = "mc", tail_floor: float = 1e-6):
         super().__init__()
         if not math.isfinite(beta) or beta <= 0:
