@@ -49,7 +49,7 @@ and commit the updated submodule.
 | `--kl-estimator mc|topk|binary|full` | `--actor.klpo_kl_estimator` | Conditional KL estimator; default: MC-KL |
 | `--mc-samples 16` | `--actor.klpo_mc_samples` | Default MC-KL: IID draws M per prefix, with replacement |
 | `--top-k 16` | `--actor.klpo_top_k` | Optional TopK-KL: head size K, capped at vocabulary size |
-| `--beta 0.1` | `--actor.klpo_beta` | Regularization strength |
+| `--beta 1e-3` | `--actor.klpo_beta` | Regularization strength |
 | `--tail-floor 1e-6` | `--actor.klpo_tail_floor` | TopK-KL tail stabilization |
 
 Token MC-KL allows M=1; sequence MC-KL requires M >= 2 for independent
@@ -68,7 +68,7 @@ python "$KLPO_PATH/scripts/train_molt.py" \
   --model /path/to/DeepSeek-R1-Distill-Qwen-1.5B \
   --train-data "$PWD/data/sanity-r1d/train" \
   --eval-data "$PWD/data/sanity-r1d/eval" \
-  --beta 0.1 --output "$PWD/outputs/klpo-r1" --dry-run
+  --beta 1e-3 --output "$PWD/outputs/klpo-r1" --dry-run
 # Remove --dry-run to train.
 # Default: token regression + MC-KL, M=16.
 # Add --route sequence for sequence regression; --kl-estimator topk --top-k 16 for TopK-KL.
@@ -82,7 +82,7 @@ python "$KLPO_PATH/scripts/train_molt.py" \
   --model /path/to/Qwen2.5-Math-1.5B \
   --train-data /path/to/deduplicated-7500-dapo/train \
   --eval-data /path/to/five-benchmark-eval \
-  --beta 0.1 --output "$PWD/outputs/klpo-qwen-math" --dry-run
+  --beta 1e-3 --output "$PWD/outputs/klpo-qwen-math" --dry-run
 ```
 
 Default placement is one actor GPU and seven rollout GPUs. Adjust `--actor-gpus`

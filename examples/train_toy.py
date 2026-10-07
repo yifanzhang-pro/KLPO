@@ -52,7 +52,7 @@ def main():
     parser.add_argument('--top-k', type=int, default=16, help='Capped to the toy vocabulary size of four')
     parser.add_argument('--mc-samples', type=int, default=16,
                         help='IID MC-KL draws per prefix: M>=2 for sequence, M>=1 for token; not capped to vocabulary')
-    parser.add_argument('--beta', type=float, default=.1)
+    parser.add_argument('--beta', type=float, default=1e-3)
     parser.add_argument('--lr', type=float, default=.03)
     parser.add_argument('--seed', type=int, default=7)
     args = parser.parse_args()

@@ -37,7 +37,7 @@ def main():
                         help="Disable trainer/rollout overlap and force on-policy synchronous collection")
     parser.add_argument("--episodes", type=int, default=1000,
                         help="Dataset passes, NOT optimizer updates")
-    parser.add_argument("--beta", type=float, default=0.1, help="Positive KLPO regularization coefficient")
+    parser.add_argument("--beta", type=float, default=1e-3, help="Positive KLPO regularization coefficient")
     parser.add_argument("--attention", default="flash_attention_2", choices=["flash_attention_2", "te"])
     parser.add_argument("--dry-run", action="store_true", help="Print command without importing Molt or starting training")
     args = parser.parse_args()

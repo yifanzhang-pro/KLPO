@@ -41,7 +41,7 @@ def klpo_sequence_loss(
     rewards: Tensor,
     action_mask: Tensor,
     *,
-    beta: float = 0.1,
+    beta: float = 1e-3,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     """KLPO sequence regression with sampled-action Binary KL (optional in the report).
 
@@ -81,7 +81,7 @@ def klpo_sequence_full_loss(
     *,
     full_log_probs: Tensor,
     behavior_full_log_probs: Tensor,
-    beta: float = 0.1,
+    beta: float = 1e-3,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     """Exact KLPO sequence regression with [B,T,V] full conditionals at stored histories.
 
@@ -121,7 +121,7 @@ def klpo_sequence_topk_loss(
     conditional_log_probs: Tensor,
     behavior_conditional_log_probs: Tensor,
     full_vocabulary: bool = False,
-    beta: float = 0.1,
+    beta: float = 1e-3,
     tail_floor: float = 1e-6,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     """KLPO sequence regression with a Top-K Aggregated KL (TopK-KL).
@@ -182,7 +182,7 @@ def klpo_sequence_mc_loss(
     *,
     mc_log_probs: Tensor,
     behavior_mc_log_probs: Tensor,
-    beta: float = 0.1,
+    beta: float = 1e-3,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     """Sequence regression with Monte Carlo KL and an unbiased cross estimate.
 
@@ -246,7 +246,7 @@ def klpo_token_loss(
     mc_log_probs: Tensor | None = None,
     behavior_mc_log_probs: Tensor | None = None,
     full_vocabulary: bool = False,
-    beta: float = 0.1,
+    beta: float = 1e-3,
     tail_floor: float = 1e-6,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     """KLPO token regression with Binary KL, TopK-KL, MC-KL, or full KL.

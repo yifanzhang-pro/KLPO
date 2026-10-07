@@ -113,7 +113,7 @@ def test_token_binary_precision_and_stale_sampler(dtype):
     current = torch.tensor([values], dtype=dtype, requires_grad=True)
     old = torch.tensor([[2 * values[0], -1000., -1.]], dtype=dtype, requires_grad=True)
     loss, stats = klpo_token_loss(current, old, torch.ones(1), torch.ones(1, 3, dtype=torch.bool),
-                                           kl_estimator='binary')
+                                           kl_estimator='binary', beta=0.1)
     loss.backward()
     assert torch.isfinite(loss) and torch.isfinite(current.grad).all()
     assert stats['return_coefficient'][0, 1] < -90

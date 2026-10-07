@@ -91,7 +91,7 @@ def test_binary_near_one_uses_log_complements(dtype):
 def test_extremely_stale_behavior_does_not_exponentiate_action_ratio():
     current = torch.tensor([[-1.]], requires_grad=True)
     old = torch.tensor([[-1000.]])
-    loss, stats = klpo_sequence_loss(current, old, torch.ones(1), torch.ones(1, 1, dtype=torch.bool))
+    loss, stats = klpo_sequence_loss(current, old, torch.ones(1), torch.ones(1, 1, dtype=torch.bool), beta=0.1)
     loss.backward()
     assert torch.isfinite(loss) and torch.isfinite(current.grad).all()
     assert stats['residual'].abs().item() > 90
