@@ -26,7 +26,7 @@ GitHub Pages serves the root of the `main` branch. In repository **Settings → 
 
 ## Paper provenance
 
-The current `KLPO.pdf` is an unmodified pdfLaTeX build of `main.tex` from [RPG-2-Overleaf commit e6c0a49](https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/e6c0a49), compiled on Overleaf. It is a 53-page technical report, *On KL-Regularized Policy Optimization*, dated September 18, 2026, revised October 5, 2026. The site and citation reproduce the author line as “Yifan Zhang, Princeton University”; no venue, DOI, or arXiv identifier is asserted.
+The current `KLPO.pdf` is an unmodified pdfLaTeX build of `main.tex` from [RPG-2-Overleaf commit 9a778da](https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/9a778da), compiled on Overleaf. It is a 58-page technical report, *On KL-Regularized Policy Optimization*, dated September 18, 2026, revised October 5, 2026. The paper is on arXiv as [2610.08963](https://arxiv.org/abs/2610.08963) (cs.LG); v1, submitted October 6, 2026, was built from [commit b485b29](https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/b485b29), so the PDF here is newer than v1 and adds the β → 0⁺ extension of the update. The site and citation reproduce the author line as “Yifan Zhang, Princeton University” and cite the arXiv preprint; no venue is asserted.
 
 When publishing a paper revision:
 

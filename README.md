@@ -5,14 +5,15 @@
 KLPO is a critic-free, single-rollout method for off-policy agentic reinforcement learning. This repository implements **KLPO token regression + Monte Carlo KL (MC-KL)** by default: terminal rewards provide the feedback, and independent auxiliary token draws estimate the sampler-conditioned score correction. It needs no same-prompt response group or learned value/normalizer model.
 
 [![Website](https://img.shields.io/badge/Project-Website-111111)](https://yifanzhang-pro.github.io/KLPO/)
+[![arXiv](https://img.shields.io/badge/arXiv-2610.08963-b31b1b)](https://arxiv.org/abs/2610.08963)
 [![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b)](KLPO.pdf)
 [![Tests](https://github.com/yifanzhang-pro/KLPO/actions/workflows/tests.yml/badge.svg)](https://github.com/yifanzhang-pro/KLPO/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue)](LICENSE)
 
 **Author:** [Yifan Zhang](https://yifzhang.com), Princeton University<br>
-**Technical report:** September 18, 2026 · **Revised:** October 5, 2026
+**arXiv:** [2610.08963](https://arxiv.org/abs/2610.08963) · **Technical report:** September 18, 2026 · **Revised:** October 5, 2026
 
-[[Project website](https://yifanzhang-pro.github.io/KLPO/)] [[Paper](KLPO.pdf)] [[Algorithm reference](docs/algorithms.md)] [[Training guide](docs/training.md)] [[Paper source](https://github.com/yifanzhang-pro/RPG-2-Overleaf)]
+[[Project website](https://yifanzhang-pro.github.io/KLPO/)] [[arXiv](https://arxiv.org/abs/2610.08963)] [[Paper](KLPO.pdf)] [[Algorithm reference](docs/algorithms.md)] [[Training guide](docs/training.md)] [[Paper source](https://github.com/yifanzhang-pro/RPG-2-Overleaf)]
 
 ## Overview
 
@@ -80,7 +81,7 @@ Token regression uses per-token feedback; sequence regression uses trajectory fe
 | [Training guide](docs/training.md) | Pinned native Molt installation, R1/Qwen-Math launchers, tensor contracts, supported execution |
 | [Experiment settings](examples/README.md) | Single-turn R1/Qwen-Math; Python tools (10/20 turns); ALFWorld (50 turns); all eight loss combinations |
 | [CPU example](examples/train_toy.py) | Small autoregressive policy with a terminal verifier and historical samplers |
-| [Paper](KLPO.pdf) · [LaTeX source](https://github.com/yifanzhang-pro/RPG-2-Overleaf) | Derivations, proofs, assumptions, and SKLPO comparison |
+| [arXiv](https://arxiv.org/abs/2610.08963) · [Paper](KLPO.pdf) · [LaTeX source](https://github.com/yifanzhang-pro/RPG-2-Overleaf) | Derivations, proofs, assumptions, and SKLPO comparison |
 | [Website maintenance](docs/website.md) | Local preview, GitHub Pages publication, and updating the paper snapshot |
 
 GPU training uses the [labs-molt KLPO fork](https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl), pinned as the `external/labs-molt` submodule. The submodule is marked `update = none`, so `git clone --recursive` does not fetch it; check it out explicitly before training or running the backend tests:
@@ -118,12 +119,15 @@ This release provides the theory, loss implementation, CPU verification, and nat
 ## Citation
 
 ```bibtex
-@techreport{zhang2026klpo,
-  title  = {On {KL}-Regularized Policy Optimization},
-  author = {Zhang, Yifan},
-  year   = {2026},
-  month  = sep,
-  url    = {https://yifanzhang-pro.github.io/KLPO/}
+@article{zhang2026klpo,
+  title         = {On {KL}-Regularized Policy Optimization},
+  author        = {Zhang, Yifan},
+  journal       = {arXiv preprint arXiv:2610.08963},
+  year          = {2026},
+  eprint        = {2610.08963},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2610.08963}
 }
 ```
 

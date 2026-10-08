@@ -11,6 +11,7 @@
   <meta name="citation_author" content="Yifan Zhang">
   <meta name="citation_publication_date" content="2026/09/18">
   <meta name="citation_pdf_url" content="https://yifanzhang-pro.github.io/KLPO/KLPO.pdf">
+  <meta name="citation_arxiv_id" content="2610.08963">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://yifanzhang-pro.github.io/KLPO/">
   <meta property="og:title" content="KLPO — Critic-Free Agentic Reinforcement Learning">
@@ -25,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/site/template.css">
-  <link rel="stylesheet" href="assets/site/style.css?v=2">
+  <link rel="stylesheet" href="assets/site/style.css?v=3">
   <script src="assets/site/site.js?v=3" defer></script>
 </head>
 <body>
@@ -39,8 +40,8 @@
   <h1 class="title">KL-Regularized<br>Policy Optimization</h1>
   <p class="subtitle is-hero-subtitle"><span class="highlight">Critic-Free Agentic Reinforcement Learning.</span><br>Default: KLPO token regression + Monte Carlo KL (MC-KL).</p>
   <div class="authors-list"><a href="https://yifzhang.com">Yifan Zhang</a></div>
-  <div class="affiliations">Princeton University<br>Technical report &nbsp;·&nbsp; September 18, 2026 &nbsp;·&nbsp; Updated October 5, 2026</div>
-  <div class="hero-links"><a class="button primary" href="KLPO.pdf">Paper ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a><a class="button" href="#method">Explore the method ↓</a><a class="button" href="#citation">Cite this work</a></div>
+  <div class="affiliations">Princeton University<br><a href="https://arxiv.org/abs/2610.08963">arXiv:2610.08963</a> &nbsp;·&nbsp; Technical report &nbsp;·&nbsp; September 18, 2026 &nbsp;·&nbsp; Updated October 5, 2026</div>
+  <div class="hero-links"><a class="button primary" href="KLPO.pdf">Paper ↗</a><a class="button" href="https://arxiv.org/abs/2610.08963">arXiv ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a><a class="button" href="#method">Explore the method ↓</a><a class="button" href="#citation">Cite this work</a></div>
   <div class="hero-pills"><span class="pill">Token regression</span><span class="pill">MC-KL (default)</span><span class="pill">Native Molt integration</span></div>
 </div></div></header>
 <main id="main">
@@ -109,19 +110,22 @@ uv run pytest -q</code></pre>
   <div class="message"><div class="message-body"><strong>Release scope.</strong> Theory, mathematical loss APIs, CPU verification, and native training integration. GPU training and paper-scale benchmark reproduction have not been validated. The current Molt launcher runs synchronously; see the training guide for execution and fixed-record replay limits. Example hyperparameters are starting values.</div></div>
 </div></div></section>
 <section id="paper" class="section content-section"><div class="container"><h2 class="section-title">Paper and resources</h2><div class="content">
-  <p><strong>On KL-Regularized Policy Optimization</strong><br>Yifan Zhang · Princeton University · Technical report · 53 pages<br>September 18, 2026 · Updated October 5, 2026</p>
+  <p><strong>On KL-Regularized Policy Optimization</strong><br>Yifan Zhang · Princeton University · <a href="https://arxiv.org/abs/2610.08963">arXiv:2610.08963</a> · 58 pages<br>September 18, 2026 · Updated October 5, 2026</p>
   <p>The report includes the complete derivation, proofs, implementation details, and the response-level instance (SKLPO) with its normalization and implicit soft-Q interpretation.</p>
-  <p><a class="button is-primary" href="KLPO.pdf" download>Download paper ↓</a><a class="button" href="https://github.com/yifanzhang-pro/RPG-2-Overleaf">LaTeX source ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a></p>
-  <p class="is-size-7 has-text-grey">The published PDF is an unmodified snapshot of paper-source commit <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/e6c0a49">e6c0a49</a>.</p>
+  <p><a class="button is-primary" href="KLPO.pdf" download>Download paper ↓</a><a class="button" href="https://arxiv.org/abs/2610.08963">arXiv ↗</a><a class="button" href="https://github.com/yifanzhang-pro/RPG-2-Overleaf">LaTeX source ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a></p>
+  <p class="is-size-7 has-text-grey">The PDF here is an unmodified snapshot of paper-source commit <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/9a778da">9a778da</a>, which revises arXiv v1 (built from <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/b485b29">b485b29</a>) with the β → 0⁺ extension of the update.</p>
 </div></div></section>
 <section id="citation" class="section content-section"><div class="container"><h2 class="section-title">Citation</h2><div class="content">
   <p>If you find this work useful, please cite:</p>
-  <pre><code id="bibtex">@techreport{zhang2026klpo,
-  title  = {On {KL}-Regularized Policy Optimization},
-  author = {Zhang, Yifan},
-  year   = {2026},
-  month  = sep,
-  url    = {https://yifanzhang-pro.github.io/KLPO/}
+  <pre><code id="bibtex">@article{zhang2026klpo,
+  title         = {On {KL}-Regularized Policy Optimization},
+  author        = {Zhang, Yifan},
+  journal       = {arXiv preprint arXiv:2610.08963},
+  year          = {2026},
+  eprint        = {2610.08963},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2610.08963}
 }</code></pre>
   <button type="button" id="copy-citation" class="button" hidden>Copy BibTeX</button><a class="button" href="citation.bib" download>Download .bib ↓</a><p id="copy-status" role="status" aria-live="polite"></p>
 </div></div></section>

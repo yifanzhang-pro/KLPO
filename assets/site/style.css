@@ -2,6 +2,8 @@
 [hidden] { display: none !important; }
 button, input { font: inherit; }
 .hero-pills { margin-top: 1.4rem; }
+.affiliations a { border-bottom: 1px solid var(--d-line); }
+.affiliations a:hover { color: var(--d-ink); border-bottom-color: var(--d-ink); }
 .content figure > a { display: block; border: 0; }
 .content .architecture figcaption { text-align: left; }
 .content pre, .method-code code { overflow-wrap: anywhere; }
