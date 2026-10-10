@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A0A0A">
   <title>KLPO — Critic-Free Agentic Reinforcement Learning</title>
-  <meta name="description" content="KL-Regularized Policy Optimization: critic-free, single-rollout agentic reinforcement learning. Token regression with Monte Carlo KL, a technical report, and a PyTorch implementation.">
+  <meta name="description" content="KL-Regularized Policy Optimization: critic-free, single-rollout agentic reinforcement learning. Token regression with Monte Carlo KL, an arXiv paper, and a PyTorch implementation.">
   <link rel="canonical" href="https://yifanzhang-pro.github.io/KLPO/">
   <meta name="citation_title" content="On KL-Regularized Policy Optimization">
   <meta name="citation_author" content="Yifan Zhang">
@@ -40,7 +40,7 @@
   <h1 class="title">KL-Regularized<br>Policy Optimization</h1>
   <p class="subtitle is-hero-subtitle"><span class="highlight">Critic-Free Agentic Reinforcement Learning.</span><br>Default: KLPO token regression + Monte Carlo KL (MC-KL).</p>
   <div class="authors-list"><a href="https://yifzhang.com">Yifan Zhang</a></div>
-  <div class="affiliations">Princeton University<br><a href="https://arxiv.org/abs/2610.08963">arXiv:2610.08963</a> &nbsp;·&nbsp; Technical report &nbsp;·&nbsp; September 18, 2026 &nbsp;·&nbsp; Updated October 5, 2026</div>
+  <div class="affiliations">Princeton University<br><a href="https://arxiv.org/abs/2610.08963">arXiv:2610.08963</a> &nbsp;·&nbsp; September 18, 2026 &nbsp;·&nbsp; Updated October 5, 2026</div>
   <div class="hero-links"><a class="button primary" href="KLPO.pdf">Paper ↗</a><a class="button" href="https://arxiv.org/abs/2610.08963">arXiv ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a><a class="button" href="#method">Explore the method ↓</a><a class="button" href="#citation">Cite this work</a></div>
   <div class="hero-pills"><span class="pill">Token regression</span><span class="pill">MC-KL (default)</span><span class="pill">Native Molt integration</span></div>
 </div></div></header>
@@ -62,7 +62,7 @@
     <figcaption>MC draws are independent of the complete rollout and sampled with replacement. M counts auxiliary tokens per prefix, not full response rollouts.</figcaption>
   </figure>
   <h3>From local policy improvement to a critic-free update.</h3>
-  <figure><a href="assets/token-regression-mc.png" aria-label="Open full-resolution Figure 1"><img src="assets/token-regression-mc.png" alt="Figure 1 derives the local RPG-URKL objective, Gibbs optimum, profiled regression, and critic-free token update with independent MC-KL." width="1316" height="1189" loading="lazy" decoding="async"></a><figcaption>Figure 1 from the report. Step 7 builds on <a href="https://arxiv.org/html/2609.15987v1#S3.SS1">BPO’s critic-free PMD reformulation</a>; Step 8 uses <a href="https://arxiv.org/abs/2609.20807v1">Score Centering</a>. Figure 4 in the appendix presents the sequence-regression alternative. <a href="KLPO.pdf#page=3">Open in the paper ↗</a></figcaption></figure>
+  <figure><a href="assets/token-regression-mc.png" aria-label="Open full-resolution Figure 1"><img src="assets/token-regression-mc.png" alt="Figure 1 derives the local RPG-URKL objective, Gibbs optimum, profiled regression, and critic-free token update with independent MC-KL." width="1316" height="1189" loading="lazy" decoding="async"></a><figcaption>Figure 1 from the paper. Step 7 builds on <a href="https://arxiv.org/html/2609.15987v1#S3.SS1">BPO’s critic-free PMD reformulation</a>; Step 8 uses <a href="https://arxiv.org/abs/2609.20807v1">Score Centering</a>. Figure 4 in the appendix presents the sequence-regression alternative. <a href="KLPO.pdf#page=3">Open in the paper ↗</a></figcaption></figure>
 </div></div></section>
 <section id="method" class="section content-section"><div class="container"><h2 class="section-title">Regression routes and KL estimators</h2><div class="content">
 <p>The regression route determines how tokens are weighted. The KL estimator determines how their scores are corrected. Explore all eight implemented combinations.</p>
@@ -111,7 +111,7 @@ uv run pytest -q</code></pre>
 </div></div></section>
 <section id="paper" class="section content-section"><div class="container"><h2 class="section-title">Paper and resources</h2><div class="content">
   <p><strong>On KL-Regularized Policy Optimization</strong><br>Yifan Zhang · Princeton University · <a href="https://arxiv.org/abs/2610.08963">arXiv:2610.08963</a> · 58 pages<br>September 18, 2026 · Updated October 5, 2026</p>
-  <p>The report includes the complete derivation, proofs, implementation details, and the response-level instance (SKLPO) with its normalization and implicit soft-Q interpretation.</p>
+  <p>The paper includes the complete derivation, proofs, implementation details, and the response-level instance (SKLPO) with its normalization and implicit soft-Q interpretation.</p>
   <p><a class="button is-primary" href="KLPO.pdf" download>Download paper ↓</a><a class="button" href="https://arxiv.org/abs/2610.08963">arXiv ↗</a><a class="button" href="https://github.com/yifanzhang-pro/RPG-2-Overleaf">LaTeX source ↗</a><a class="button" href="https://github.com/yifanzhang-pro/KLPO">GitHub ↗</a></p>
   <p class="is-size-7 has-text-grey">The PDF here is an unmodified snapshot of paper-source commit <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/9a778da">9a778da</a>, which revises arXiv v1 (built from <a href="https://github.com/yifanzhang-pro/RPG-2-Overleaf/commit/b485b29">b485b29</a>) with the β → 0⁺ extension of the update.</p>
 </div></div></section>

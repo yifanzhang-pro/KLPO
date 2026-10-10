@@ -11,7 +11,7 @@ KLPO is a critic-free, single-rollout method for off-policy agentic reinforcemen
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue)](LICENSE)
 
 **Author:** [Yifan Zhang](https://yifzhang.com), Princeton University<br>
-**arXiv:** [2610.08963](https://arxiv.org/abs/2610.08963) · **Technical report:** September 18, 2026 · **Revised:** October 5, 2026
+**arXiv:** [2610.08963](https://arxiv.org/abs/2610.08963) · **First released:** September 18, 2026 · **Revised:** October 5, 2026
 
 [[Project website](https://yifanzhang-pro.github.io/KLPO/)] [[arXiv](https://arxiv.org/abs/2610.08963)] [[Paper](KLPO.pdf)] [[Algorithm reference](docs/algorithms.md)] [[Training guide](docs/training.md)] [[Paper source](https://github.com/yifanzhang-pro/RPG-2-Overleaf)]
 
@@ -24,7 +24,7 @@ KLPO is a critic-free, single-rollout method for off-policy agentic reinforcemen
 
 [![Figure 1: derivation of KLPO token regression with MC-KL, the default route.](assets/token-regression-mc.png)](KLPO.pdf#page=3)
 
-*Figure 1 from the report. Step 7 builds on [BPO’s critic-free PMD reformulation](https://arxiv.org/html/2609.15987v1#S3.SS1); Step 8 uses [Score Centering](https://arxiv.org/abs/2609.20807v1). Independent MC-KL recovers the full-KL gradient in expectation under the stated sampling assumptions. TopK-KL and Binary KL are optional approximations.*
+*Figure 1 from the paper. Step 7 builds on [BPO’s critic-free PMD reformulation](https://arxiv.org/html/2609.15987v1#S3.SS1); Step 8 uses [Score Centering](https://arxiv.org/abs/2609.20807v1). Independent MC-KL recovers the full-KL gradient in expectation under the stated sampling assumptions. TopK-KL and Binary KL are optional approximations.*
 
 ## Quick start
 
@@ -71,7 +71,7 @@ The regression route selects the feedback coefficient; the KL estimator selects 
 
 MC-KL averages independent sampler log-ratios. **Top-K Aggregated KL (TopK-KL)** keeps the sampler's K largest probabilities and combines all remaining tokens into one tail bucket. Binary KL groups the sampled action against its complement; Full KL uses the entire vocabulary. TopK-KL defaults to K=16 in the toy example and the training launchers. The toy vocabulary has only four tokens, so K is capped at four there and the head covers the whole vocabulary; pass `--top-k 2` to see a nontrivial head/tail split.
 
-Token regression uses per-token feedback; sequence regression uses trajectory feedback. Sequence MC-KL requires M ≥ 2 for leave-one-out residuals. Full-KL and independent-MC population equivalences require the report's assumptions; individual sample gradients can differ, and finite TopK-KL/Binary approximations need not preserve those equivalences. KLPO sequence regression is distinct from the SKLPO response-Gibbs comparison in the paper's appendix.
+Token regression uses per-token feedback; sequence regression uses trajectory feedback. Sequence MC-KL requires M ≥ 2 for leave-one-out residuals. Full-KL and independent-MC population equivalences require the paper's assumptions; individual sample gradients can differ, and finite TopK-KL/Binary approximations need not preserve those equivalences. KLPO sequence regression is distinct from the SKLPO response-Gibbs comparison in the paper's appendix.
 
 ## Training and documentation
 
