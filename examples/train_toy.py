@@ -50,7 +50,7 @@ def main():
     parser.add_argument('--reuse', type=int, default=2, help='Learner steps per collected batch')
     parser.add_argument('--publish-every', type=int, default=4, help='Learner updates between sampler snapshots')
     parser.add_argument('--top-k', type=int, default=16, help='Capped to the toy vocabulary size of four')
-    parser.add_argument('--mc-samples', type=int, default=16,
+    parser.add_argument('--mc-samples', type=int, default=8,
                         help='IID MC-KL draws per prefix: M>=2 for sequence, M>=1 for token; not capped to vocabulary')
     parser.add_argument('--beta', type=float, default=1e-3)
     parser.add_argument('--lr', type=float, default=.03)

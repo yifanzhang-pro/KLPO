@@ -1,6 +1,6 @@
 # Single-turn and multi-turn KLPO experiments
 
-These recipes adapt all five base settings in [FlashREINFORCE's examples](https://github.com/yifanzhang-pro/FlashREINFORCE/tree/a1ebe22/examples) to KLPO's native Molt interface: two single-turn math experiments and three multi-turn experiments. **Token regression + MC-KL, M=16, is the default.** Each training prompt produces one complete trajectory, including all assistant turns and tool observations. Both regression routes and all four KL estimators are selectable.
+These recipes adapt all five base settings in [FlashREINFORCE's examples](https://github.com/yifanzhang-pro/FlashREINFORCE/tree/a1ebe22/examples) to KLPO's native Molt interface: two single-turn math experiments and three multi-turn experiments. **Token regression + MC-KL, M=8, is the default.** Each training prompt produces one complete trajectory, including all assistant turns and tool observations. Both regression routes and all four KL estimators are selectable.
 
 Single-turn math uses Molt's built-in math agent. For multi-turn experiments, supply a compatible Python-tool or ALFWorld agent. Prepared data, checkpoints, and GPU placement are supplied separately. These are experiment starting points; GPU runs and benchmark results are not included. The existing `scripts/train_molt.py --recipe r1|qwen_math --sync` entry point is also retained.
 
@@ -88,8 +88,8 @@ Append these options to any launch command; compare runs with the same data, age
 
 | Regression route | MC-KL | TopK-KL | Binary KL | Full KL |
 | --- | --- | --- | --- | --- |
-| **Token (default)** | No extra flags; `--mc-samples 16` | `--kl-estimator topk --top-k 16` | `--kl-estimator binary` | `--kl-estimator full` |
-| Sequence | `--route sequence --mc-samples 16` | `--route sequence --kl-estimator topk --top-k 16` | `--route sequence --kl-estimator binary` | `--route sequence --kl-estimator full` |
+| **Token (default)** | No extra flags; `--mc-samples 8` | `--kl-estimator topk --top-k 16` | `--kl-estimator binary` | `--kl-estimator full` |
+| Sequence | `--route sequence --mc-samples 8` | `--route sequence --kl-estimator topk --top-k 16` | `--route sequence --kl-estimator binary` | `--route sequence --kl-estimator full` |
 
 Use `--beta` to set regularization. M counts IID auxiliary token draws per policy prefix (token regression M ≥ 1; sequence regression M ≥ 2), not complete rollouts. K is the TopK-KL head size. The current MC implementation captures full sampler logprobs internally before reducing transport to M records; Full KL retains the whole vocabulary. Both can be expensive at these context lengths. See [sampling and tensor contracts](../docs/training.md#tensor-and-reduction-contracts).
 
