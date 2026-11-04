@@ -7,7 +7,7 @@
 The [labs-molt fork](https://github.com/yifanzhang-pro/labs-molt/tree/feat/klpo-all-kl)
 supports all eight combinations of `--route token|sequence` and
 `--kl-estimator mc|topk|binary|full`. The default is **token regression + MC-KL**,
-with M=8 auxiliary draws per prefix. Selecting sequence regression also uses
+with M=16 auxiliary draws per prefix. Selecting sequence regression also uses
 MC-KL unless another estimator is specified. TopK-KL remains optional, with K=16.
 Molt owns generation-time probability capture, replay transport, differentiable
 trainer scoring, FSDP2, accumulation, evaluation, and checkpoints. Its native
@@ -47,7 +47,7 @@ and commit the updated submodule.
 | --- | --- | --- |
 | `--route token|sequence` | `--actor.klpo_route` | Regression coefficient; default: token |
 | `--kl-estimator mc|topk|binary|full` | `--actor.klpo_kl_estimator` | Conditional KL estimator; default: MC-KL |
-| `--mc-samples 8` | `--actor.klpo_mc_samples` | Default MC-KL: IID draws M per prefix, with replacement |
+| `--mc-samples 16` | `--actor.klpo_mc_samples` | Default MC-KL: IID draws M per prefix, with replacement |
 | `--top-k 16` | `--actor.klpo_top_k` | Optional TopK-KL: head size K, capped at vocabulary size |
 | `--beta 1e-3` | `--actor.klpo_beta` | Regularization strength; default 1e-3 (1e-4 also works), 0 gives score centering |
 | `--tail-floor 1e-6` | `--actor.klpo_tail_floor` | TopK-KL tail stabilization |
@@ -70,7 +70,7 @@ python "$KLPO_PATH/scripts/train_molt.py" \
   --eval-data "$PWD/data/sanity-r1d/eval" \
   --beta 1e-3 --output "$PWD/outputs/klpo-r1" --dry-run
 # Remove --dry-run to train.
-# Default: token regression + MC-KL, M=8.
+# Default: token regression + MC-KL, M=16.
 # Add --route sequence for sequence regression; --kl-estimator topk --top-k 16 for TopK-KL.
 ```
 

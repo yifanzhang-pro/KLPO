@@ -64,7 +64,7 @@ def test_training_dry_run_uses_actual_klpo_path(recipe, route):
     if route != 'token':
         command += ['--route', route]
     result = subprocess.run(command, text=True, capture_output=True, check=True)
-    for flag in ('--actor.loss_mode klpo', '--actor.klpo_beta 0.3', '--actor.klpo_kl_estimator mc', '--actor.klpo_mc_samples 8', '--train.async_queue_size 4',
+    for flag in ('--actor.loss_mode klpo', '--actor.klpo_beta 0.3', '--actor.klpo_kl_estimator mc', '--actor.klpo_mc_samples 16', '--train.async_queue_size 4',
                  '--algo.advantage.is_correction_level off', '--algo.advantage.no_whiten',
                  '--algo.kl.init_coef 0', '--rollout.n_samples_per_prompt 1', '--train.max_epochs 1',
                  f'--actor.klpo_route {route}'):

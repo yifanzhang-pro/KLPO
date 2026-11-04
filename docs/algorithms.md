@@ -10,7 +10,7 @@ This is the paper's Figure 1 and the default for the library, CPU example, and
 Molt launcher. Let `p` be the current trainer policy, `q` the actual historical
 sampler, `R` the terminal reward, and `ell = log(p_action) - log(q_action)`.
 M counts auxiliary token draws per prefix, not full response rollouts; the
-launchers default to M=8, and token regression allows any M >= 1. The default
+launchers default to M=16, and token regression allows any M >= 1. The default
 regularization strength is `beta=1e-3` (`1e-4` also works). `beta=0` is accepted:
 it is the paper's beta -> 0+ limit, the score-centered policy gradient with
 coefficient `R`, and the squared-residual `regression_loss` is then omitted
@@ -90,7 +90,7 @@ The paper's Figure 1 defaults to **KLPO token regression + MC-KL**;
 Figure 4 (Appendix D) shows **KLPO sequence regression + MC-KL** as the alternative route.
 TopK-KL and Binary KL are optional approximations for both. The toy CLI, Molt
 launcher, native Molt CLI, and `KLPOLoss` adapter default to token regression
-with MC-KL; CLI entry points use M=8, configurable with `--mc-samples` (native Molt:
+with MC-KL; CLI entry points use M=16, configurable with `--mc-samples` (native Molt:
 `--actor.klpo_mc_samples`). `klpo_token_loss` also defaults to MC-KL and requires
 MC records. The sampled-action-only `klpo_sequence_loss` API remains Binary KL;
 use `klpo_sequence_mc_loss` for sequence MC-KL.
@@ -306,7 +306,7 @@ See [the training guide](training.md) for the R1/Qwen-Math Molt launchers,
 installation, tensor contracts, and limitations. The native Molt integration supports
 **both regression routes × MC-KL, TopK-KL, Binary KL, and Full KL** with actual
 sampler records, raw terminal rewards, and global trajectory normalization.
-It defaults to `--route token --kl-estimator mc --mc-samples 8`. Select
+It defaults to `--route token --kl-estimator mc --mc-samples 16`. Select
 `--route sequence` for sequence regression, or `--kl-estimator topk|binary|full`
 for another KL estimator. TopK-KL uses `--top-k 16` by default.
 The fork collects auxiliary records and scores the same token IDs in the trainer;

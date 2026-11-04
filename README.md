@@ -35,7 +35,7 @@ git clone https://github.com/yifanzhang-pro/KLPO.git
 cd KLPO
 uv sync
 
-uv run python examples/train_toy.py  # Default: token regression + MC-KL, M=8
+uv run python examples/train_toy.py  # Default: token regression + MC-KL, M=16
 uv run python examples/train_toy.py --mc-samples 1
 uv run pytest -q
 ```
@@ -60,7 +60,7 @@ The regression route selects the feedback coefficient; the KL estimator selects 
 
 | Regression route | KL estimator | Toy example options |
 | --- | --- | --- |
-| **Token (default)** | **MC-KL (default)** | No flags; `--mc-samples 8` by default, M ≥ 1 |
+| **Token (default)** | **MC-KL (default)** | No flags; `--mc-samples 16` by default, M ≥ 1 |
 | Token | TopK-KL | `--kl-estimator topk --top-k 16` |
 | Token | Binary KL | `--kl-estimator binary` |
 | Token | Full KL | `--kl-estimator full` |
@@ -92,7 +92,7 @@ git submodule update --init --checkout external/labs-molt
 
 The CPU example and the remaining tests run without it. The launchers and `scripts/check_molt.py` use this checkout by default; see the [training guide](docs/training.md#native-molt-integration).
 
-All recipes default to `--route token --kl-estimator mc --mc-samples 8`. The pinned backend requires synchronous collection with complete trajectories and one update per batch. The unified `examples/run_experiment.py` launcher sets this automatically for single-turn and multi-turn settings; pass `--sync` to the retained `scripts/train_molt.py` launcher (its asynchronous switches are not supported by the current pin). GPU training requires a compatible Linux/CUDA environment; follow the training guide.
+All recipes default to `--route token --kl-estimator mc --mc-samples 16`. The pinned backend requires synchronous collection with complete trajectories and one update per batch. The unified `examples/run_experiment.py` launcher sets this automatically for single-turn and multi-turn settings; pass `--sync` to the retained `scripts/train_molt.py` launcher (its asynchronous switches are not supported by the current pin). GPU training requires a compatible Linux/CUDA environment; follow the training guide.
 
 Preview single-turn and multi-turn experiments without installing Molt:
 
