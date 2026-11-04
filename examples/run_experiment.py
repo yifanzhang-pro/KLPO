@@ -48,7 +48,7 @@ def main():
     parser.add_argument("--route", choices=["token", "sequence"], default="token")
     parser.add_argument("--kl-estimator", choices=["mc", "topk", "binary", "full"], default="mc")
     parser.add_argument("--beta", type=float, default=1e-3)
-    parser.add_argument("--mc-samples", type=int, default=8)
+    parser.add_argument("--mc-samples", type=int, default=16)
     parser.add_argument("--top-k", type=int, default=16)
     parser.add_argument("--tail-floor", type=float, default=1e-6)
     parser.add_argument("--molt-path", type=Path, default=MOLT_SUBMODULE,

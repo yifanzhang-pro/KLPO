@@ -21,7 +21,7 @@ def main():
                         help="KLPO sequence/token regression")
     parser.add_argument("--kl-estimator", choices=["binary", "topk", "mc", "full"], default="mc")
     parser.add_argument("--top-k", type=int, default=16, help="TopK-KL head size K")
-    parser.add_argument("--mc-samples", type=int, default=8, help="Independent MC samples M per prefix")
+    parser.add_argument("--mc-samples", type=int, default=16, help="Independent MC samples M per prefix")
     parser.add_argument("--tail-floor", type=float, default=1e-6)
     parser.add_argument("--molt-path", type=Path, default=MOLT_SUBMODULE,
                         help="labs-molt checkout (default: the external/labs-molt submodule)")
